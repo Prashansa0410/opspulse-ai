@@ -6,7 +6,7 @@ import { useAuth } from "../lib/auth";
 
 interface LoginModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
@@ -25,7 +25,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
     try {
       const { access_token } = await api.login({ username, password });
       login(access_token);
-      onClose();
+      if (onClose) onClose();
     } catch (err: any) {
       setError(err.message || "Invalid credentials");
     } finally {
@@ -44,7 +44,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
     try {
       const { access_token } = await api.login({ username: usr, password: pwd });
       login(access_token);
-      onClose();
+      if (onClose) onClose();
     } catch (err: any) {
       setError(err.message || "Invalid credentials");
     } finally {
@@ -53,14 +53,16 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-[#0f172a] border border-slate-700/50 rounded-xl p-8 max-w-md w-full shadow-2xl relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white"
-        >
-          &times;
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+      <div className="bg-[#0f172a] border border-slate-700/50 rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-slate-400 hover:text-white"
+          >
+            &times;
+          </button>
+        )}
 
         <h2 className="text-2xl font-semibold mb-6 text-white text-center">
           Sign In to OpsPulse
