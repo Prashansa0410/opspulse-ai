@@ -51,8 +51,8 @@ export default function ExecutiveOverviewPage() {
   };
 
   useEffect(() => {
-    // Initial page load: read existing data only.
-    loadDashboard();
+    // Initial page load: generate live events so data is current right away
+    generateAndRefresh();
 
     // Simulate streaming traffic once per minute while the dashboard is open.
     const interval = window.setInterval(generateAndRefresh, 60_000);
@@ -79,10 +79,10 @@ export default function ExecutiveOverviewPage() {
           <span className="text-xs font-mono text-slate-400">{loading ? "Refreshing live data…" : `Live • Updated ${new Date().toLocaleTimeString()}`}</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MetricCard title="Orders Today" value={summary?.orders_today ?? 0} delta={18.4} deltaLabel="surge volume" subtitle={`GMV: ₹${((summary?.gmv_today ?? 0) / 100000).toFixed(1)} Lakhs`} />
-          <MetricCard title="On-Time Delivery (OTD)" value={summary?.on_time_delivery_rate ?? 0} suffix="%" delta={summary?.on_time_delivery_delta ?? 0} isPositiveGood={true} hasWhyButton={true} onWhyClick={() => setIsWhyModalOpen(true)} severity="critical" subtitle="Target: 95.0% • Breach alert active" />
-          <MetricCard title="GMV At Risk" value={`₹${((summary?.gmv_at_risk ?? 0) / 10000000).toFixed(2)} Cr`} delta={summary?.gmv_at_risk_delta_pct ?? 0} isPositiveGood={false} severity="critical" subtitle="Current operational exposure" />
-          <MetricCard title="Payment Failure Rate" value={summary?.payment_failure_rate ?? 0} suffix="%" delta={summary?.payment_failure_delta ?? 0} isPositiveGood={false} severity="warning" subtitle="Live gateway signal" />
+          <MetricCard title="Orders Today" value={loading && !summary ? "..." : summary?.orders_today ?? 0} delta={18.4} deltaLabel="surge volume" subtitle={`GMV: ₹${((summary?.gmv_today ?? 0) / 100000).toFixed(1)} Lakhs`} />
+          <MetricCard title="On-Time Delivery (OTD)" value={loading && !summary ? "..." : summary?.on_time_delivery_rate ?? 0} suffix={loading && !summary ? "" : "%"} delta={summary?.on_time_delivery_delta ?? 0} isPositiveGood={true} hasWhyButton={true} onWhyClick={() => setIsWhyModalOpen(true)} severity="critical" subtitle="Target: 95.0% • Breach alert active" />
+          <MetricCard title="GMV At Risk" value={loading && !summary ? "..." : `₹${((summary?.gmv_at_risk ?? 0) / 10000000).toFixed(2)} Cr`} delta={summary?.gmv_at_risk_delta_pct ?? 0} isPositiveGood={false} severity="critical" subtitle="Current operational exposure" />
+          <MetricCard title="Payment Failure Rate" value={loading && !summary ? "..." : summary?.payment_failure_rate ?? 0} suffix={loading && !summary ? "" : "%"} delta={summary?.payment_failure_delta ?? 0} isPositiveGood={false} severity="warning" subtitle="Live gateway signal" />
         </div>
       </section>
 
