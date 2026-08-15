@@ -8,7 +8,10 @@
 [![DuckDB](https://img.shields.io/badge/DuckDB-1.1-FFF000.svg?logo=duckdb&logoColor=black)](https://duckdb.org)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-black.svg?logo=next.js&logoColor=white)](https://nextjs.org)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg?logo=docker&logoColor=white)](https://docker.com)
+[![Deployment Cost: $0/mo](https://img.shields.io/badge/Portfolio%20Cost-%240%2Fmonth-brightgreen.svg)](COST.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> *"For the portfolio deployment I deliberately chose a zero-cost architecture, while the system is designed so the storage, compute and database layers can be moved to AWS when production scale requires it."*
 
 ---
 
@@ -52,7 +55,7 @@ In high-volume e-commerce, logistics, and delivery networks, when **On-Time Deli
                                          v
                   +----------------------------------------------+
                   |         Analytical Warehouse Engine          |
-                  |             (DuckDB / PostgreSQL)            |
+                  |         (DuckDB / Supabase PostgreSQL)       |
                   +----------------------------------------------+
                          |               |               |
                          v               v               v
@@ -78,19 +81,15 @@ In high-volume e-commerce, logistics, and delivery networks, when **On-Time Deli
 
 ---
 
-## 3. Technology Stack
+## 3. Technology Stack & $0/Month Cloud Deployment
 
-| Tier | Technology | Purpose |
-|---|---|---|
-| **Backend & APIs** | Python 3.14, FastAPI, Pydantic v2 | High-performance asynchronous REST API with OpenAPI validation |
-| **Warehouse Engine**| DuckDB Columnar Warehouse, Parquet | Vectorized analytical execution, sub-30ms aggregation latency |
-| **Data Pipeline** | dbt-style SQL models, Kafka stream broker | Staging, dimensional modeling, and stream ingestion |
-| **Data Quality** | Custom Python DQ Assertion Engine | 8 automated integrity rules and composite DQ scoring |
-| **Machine Learning**| Scikit-learn (Gradient Boosting, Isolation Forest)| SLA breach risk prediction and rolling baseline anomaly detection |
-| **AI Intelligence** | Multi-Tool Agent, AST SQL Guardrails | Natural language query interface with verified tool execution |
-| **Frontend UI** | Next.js 15 (React 19), TypeScript, Tailwind | 11 enterprise screens, responsive design, interactive charts |
-| **Observability** | Prometheus, Grafana, Structured JSON Logs | Endpoint latency histograms, throughput gauges, request traces |
-| **DevOps & Cloud** | Docker, Docker Compose, GitHub Actions, AWS ECS | One-click local startup, automated CI/CD pipeline |
+| Layer | Component | Local Containerized Tech | Zero-Cost ($0/mo) Portfolio Deployment |
+|---|---|---|---|
+| **Frontend** | Control Tower UI | Next.js 15, React 19, Tailwind | **Vercel** (Global Edge CDN, HTTPS) |
+| **Backend & ML**| REST API & Inference | FastAPI, Scikit-learn, Pydantic | **Render / Koyeb** (Free Web Service) |
+| **Warehouse** | Analytical Database | DuckDB Columnar, Parquet | **DuckDB (Embedded) / Supabase Postgres** |
+| **Telemetry** | Metrics & Logging | Prometheus, Grafana | **Prometheus In-Process `/metrics`** |
+| **DevOps** | CI/CD & Automation | Docker Compose | **GitHub Actions CI/CD** |
 
 ---
 
@@ -181,12 +180,12 @@ pytest backend/tests/test_performance.py -s
 ## 8. Portfolio Demo Scripts
 
 ### 🎙️ 60-Second Recruiter Demo Script
-> *"OpsPulse AI is an enterprise operational intelligence platform for high-volume commerce. In our live demo incident, a flash sale causes our Bangalore fulfillment center to saturate at 94.6% utilization, causing On-Time Delivery to drop by 5.1% and putting ₹3.24 Cr GMV at risk. When an operations leader clicks 'WHY?', our multi-stage attribution engine mathematically proves that 42% of the drop was warehouse packing delay and 34% was SwiftExpress carrier dock lag. Simultaneously, our ML Gradient Boosting model scores in-flight shipments in sub-millisecond time. Leaders can ask our sandboxed AI Analyst natural language questions or launch our What-If Simulation Lab, which calculates that shifting 18% volume to BLR-02 recovers On-Time Delivery to 93.6% and secures ₹1.38 Cr in GMV."*
+> *"OpsPulse AI is an enterprise operational intelligence platform for high-volume commerce. In our live demo incident, a flash sale causes our Bangalore fulfillment center to saturate at 94.6% utilization, causing On-Time Delivery to drop by 5.1% and putting ₹3.24 Cr GMV at risk. When an operations leader clicks 'WHY?', our multi-stage attribution engine mathematically proves that 42% of the drop was warehouse packing delay and 34% was carrier dock lag. Simultaneously, our ML Gradient Boosting model scores in-flight shipments in sub-millisecond time. Leaders can ask our sandboxed AI Analyst natural language questions or launch our What-If Simulation Lab, which proves that shifting 18% volume to BLR-02 recovers On-Time Delivery to 93.6% and secures ₹1.38 Cr in GMV."*
 
 ### 🎙️ 5-Minute Hiring Manager Technical Walkthrough
 1. **Show Executive Overview**: Highlight headline KPIs, OTD trend curves, and the active incident alert.
 2. **Demonstrate Explainability**: Click the "WHY?" button to reveal the multi-dimensional attribution decomposition.
-3. **Inspect Warehouse & Carrier Analytics**: Review facility utilization gauges (BLR-01 at 94.6% vs BLR-02 at 55.2%) and carrier performance tiers.
+3. **Inspect Warehouse & Carrier Analytics**: Review facility utilization gauges (BLR-01 at 94.6% vs BLR-02 at 55.2%) and carrier dock delay tiers.
 4. **Demonstrate Machine Learning**: Open `/sla-risk` to inspect the Gradient Boosting model's ROC-AUC (94.2%) and feature importances.
 5. **Query the AI Operations Analyst**: Ask *"Why did on-time delivery fall yesterday?"* and inspect the transparent tool execution traces (`get_root_causes`, `get_warehouse_performance`).
 6. **Execute What-If Simulation**: Use the slider in `/simulations` to simulate an 18% volume shift from BLR-01 to BLR-02 and observe the predicted +4.9% OTD lift.
