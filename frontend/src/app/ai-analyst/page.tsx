@@ -52,14 +52,14 @@ export default function AIAnalystPage() {
     <div className="space-y-6 max-w-5xl mx-auto animate-fadeIn">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-900 pb-4">
         <div>
-          <h1 className="text-2xl font-bold font-mono tracking-tight text-white flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold font-mono tracking-tight text-neutral-100 flex items-center gap-2">
+            <Terminal className="w-5 h-5 text-neutral-400" />
             <span>AI Operations Analyst</span>
           </h1>
-          <p className="text-xs text-slate-400">
-            Autonomous decision intelligence agent with verified SQL execution, multi-tool calling, and zero-hallucination mathematical citations.
+          <p className="text-xs text-neutral-500 pt-1">
+            Autonomous decision intelligence agent with verified SQL execution and tool calling.
           </p>
         </div>
 
@@ -98,19 +98,19 @@ export default function AIAnalystPage() {
         }}
         className="relative"
       >
-        <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-slate-800 focus-within:border-blue-500 shadow-lg transition-colors">
+        <div className="flex items-center gap-2 p-1.5 rounded border border-neutral-800 bg-[#0a0a0a] focus-within:border-neutral-600 transition-colors">
           <input
             type="text"
-            placeholder="Ask anything about orders, fulfillment bottlenecks, carrier delays, SLA breach predictions..."
+            placeholder="Ask anything about orders, bottlenecks, carrier delays..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             disabled={loading}
-            className="w-full bg-transparent text-white px-3 py-2 text-sm outline-none placeholder:text-slate-500"
+            className="w-full bg-transparent text-neutral-100 px-3 py-2 text-sm outline-none placeholder:text-neutral-600"
           />
           <button
             type="submit"
             disabled={loading || !prompt.trim()}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 text-white text-xs font-bold transition-all shadow-md shadow-blue-500/25 shrink-0"
+            className="flex items-center gap-1.5 px-4 py-2 rounded bg-neutral-100 hover:bg-white disabled:bg-neutral-900 disabled:text-neutral-600 text-neutral-900 text-xs font-bold transition-colors shrink-0"
           >
             {loading ? <Clock className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             <span>Analyze</span>
@@ -121,35 +121,35 @@ export default function AIAnalystPage() {
       {/* Conversation Thread */}
       <div className="space-y-6">
         {conversation.map((msg, idx) => (
-          <div key={idx} className="p-5 rounded-2xl border border-slate-800 bg-[#111827]/90 space-y-4 shadow-sm">
+          <div key={idx} className="p-5 rounded border border-neutral-900 bg-[#0a0a0a] space-y-4">
             
             {/* User Question */}
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+            <div className="flex items-center justify-between border-b border-neutral-900 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-blue-600/30 text-blue-400 flex items-center justify-center text-xs font-bold">
-                  Q
+                <div className="w-6 h-6 flex items-center justify-center text-neutral-500 text-xs font-mono font-bold">
+                  &gt;
                 </div>
-                <h3 className="text-sm font-bold text-white font-sans">{msg.query}</h3>
+                <h3 className="text-sm font-semibold text-neutral-200 font-sans tracking-tight">{msg.query}</h3>
               </div>
-              <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400">
-                <span>Latency: <strong className="text-emerald-400">{msg.latency_ms}ms</strong></span>
+              <div className="flex items-center gap-3 text-[11px] font-mono text-neutral-600">
+                <span>Latency: <strong className="text-neutral-400">{msg.latency_ms}ms</strong></span>
                 <span>{msg.timestamp}</span>
               </div>
             </div>
 
             {/* Tool Calls Execution Trace */}
             {msg.tool_calls && msg.tool_calls.length > 0 && (
-              <div className="p-3 rounded-lg bg-slate-950/90 border border-slate-800/80 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400 font-semibold uppercase">
-                  <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Executed Tools & SQL Queries ({msg.tool_calls.length})</span>
+              <div className="p-3 rounded bg-neutral-900/50 border border-neutral-900 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
+                  <Terminal className="w-3 h-3 text-neutral-400" />
+                  <span>Tools & SQL Executed ({msg.tool_calls.length})</span>
                 </div>
                 <div className="space-y-1 font-mono text-xs">
                   {msg.tool_calls.map((tc, tIdx) => (
-                    <div key={tIdx} className="flex items-center gap-2 text-slate-300">
-                      <span className="text-emerald-400">✓</span>
-                      <span className="text-blue-400 font-semibold">{tc.tool}()</span>
-                      <span className="text-slate-400 text-[11px]">{JSON.stringify(tc.args)}</span>
+                    <div key={tIdx} className="flex items-center gap-2 text-neutral-400">
+                      <span className="text-neutral-600">✓</span>
+                      <span className="text-blue-400">{tc.tool}()</span>
+                      <span className="text-neutral-600 text-[11px]">{JSON.stringify(tc.args)}</span>
                     </div>
                   ))}
                 </div>
@@ -157,7 +157,7 @@ export default function AIAnalystPage() {
             )}
 
             {/* AI Formatted Response */}
-            <div className="text-sm text-slate-200 leading-relaxed font-sans prose prose-invert max-w-none space-y-2">
+            <div className="text-sm text-neutral-300 leading-relaxed font-sans prose prose-invert max-w-none space-y-2">
               <div className="whitespace-pre-line">
                 {msg.response}
               </div>
@@ -165,9 +165,9 @@ export default function AIAnalystPage() {
 
             {/* Citations & Evidence Footnote */}
             {msg.citations && msg.citations.length > 0 && (
-              <div className="pt-3 border-t border-slate-800/80 flex items-center gap-2 text-[11px] font-mono text-slate-400">
-                <FileCode className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                <span>Verified Data Sources: {msg.citations.join(" • ")}</span>
+              <div className="pt-3 border-t border-neutral-900 flex items-center gap-2 text-[10px] font-mono text-neutral-500">
+                <FileCode className="w-3.5 h-3.5 shrink-0" />
+                <span>Verified Sources: {msg.citations.join(" • ")}</span>
               </div>
             )}
 
