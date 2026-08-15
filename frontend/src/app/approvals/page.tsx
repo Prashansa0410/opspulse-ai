@@ -40,7 +40,7 @@ export default function ApprovalsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">AI Recommendations & Approvals</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white">AI Recommendations & Approvals</h1>
       </div>
 
       {error && (
@@ -50,15 +50,15 @@ export default function ApprovalsPage() {
       )}
 
       {loading ? (
-        <div className="text-slate-400">Loading...</div>
+        <div className="text-neutral-600 dark:text-slate-400">Loading...</div>
       ) : recommendations.length === 0 ? (
-        <div className="text-slate-400 bg-[#0f172a] border border-slate-800 rounded-xl p-8 text-center">
+        <div className="text-neutral-600 dark:text-slate-400 bg-[#0f172a] border border-neutral-200 dark:border-slate-800 rounded-xl p-8 text-center">
           No pending AI recommendations.
         </div>
       ) : (
         <div className="space-y-4">
           {recommendations.map((rec) => (
-            <div key={rec.recommendation_id} className="bg-[#0f172a] border border-slate-800 rounded-xl p-6">
+            <div key={rec.recommendation_id} className="bg-[#0f172a] border border-neutral-200 dark:border-slate-800 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-mono text-slate-500">{rec.recommendation_id}</span>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
@@ -71,19 +71,19 @@ export default function ApprovalsPage() {
               </div>
               
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-slate-400 mb-1">User Query</h3>
-                <p className="text-slate-200 bg-slate-900/50 p-3 rounded-lg text-sm font-mono">{rec.query}</p>
+                <h3 className="text-sm font-semibold text-neutral-600 dark:text-slate-400 mb-1">User Query</h3>
+                <p className="text-neutral-800 dark:text-slate-200 bg-slate-900/50 p-3 rounded-lg text-sm font-mono">{rec.query}</p>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-sm font-semibold text-slate-400 mb-1">AI Action Plan</h3>
-                <div className="text-slate-300 text-sm prose prose-invert max-w-none bg-blue-950/20 p-4 rounded-lg border border-blue-900/30 whitespace-pre-wrap">
+                <h3 className="text-sm font-semibold text-neutral-600 dark:text-slate-400 mb-1">AI Action Plan</h3>
+                <div className="text-neutral-700 dark:text-slate-300 text-sm prose prose-invert max-w-none bg-blue-950/20 p-4 rounded-lg border border-blue-900/30 whitespace-pre-wrap">
                   {rec.recommendation_text}
                 </div>
               </div>
 
               {rec.status === 'PENDING' && canReview && (
-                <div className="flex items-center gap-3 border-t border-slate-800 pt-4 mt-4">
+                <div className="flex items-center gap-3 border-t border-neutral-200 dark:border-slate-800 pt-4 mt-4">
                   <button 
                     onClick={() => handleReview(rec.recommendation_id, "APPROVED")}
                     className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium rounded-lg transition-colors"
@@ -92,7 +92,7 @@ export default function ApprovalsPage() {
                   </button>
                   <button 
                     onClick={() => handleReview(rec.recommendation_id, "REVISION_REQUESTED")}
-                    className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium rounded-lg transition-colors"
+                    className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-neutral-900 dark:text-white text-sm font-medium rounded-lg transition-colors"
                   >
                     Request Revision
                   </button>
@@ -106,8 +106,8 @@ export default function ApprovalsPage() {
               )}
 
               {rec.reviewer_id && (
-                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-500 flex flex-col gap-1">
-                  <div>Reviewed by <span className="font-semibold text-slate-300">{rec.reviewer_id}</span> at {new Date(rec.reviewed_at).toLocaleString()}</div>
+                <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-slate-800 text-xs text-slate-500 flex flex-col gap-1">
+                  <div>Reviewed by <span className="font-semibold text-neutral-700 dark:text-slate-300">{rec.reviewer_id}</span> at {new Date(rec.reviewed_at).toLocaleString()}</div>
                   {rec.reviewer_comments && <div>Comments: <span className="italic">"{rec.reviewer_comments}"</span></div>}
                 </div>
               )}

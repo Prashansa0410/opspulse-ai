@@ -20,12 +20,12 @@ export default function CarriersPage() {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Header */}
-      <div className="border-b border-slate-800 pb-4">
-        <h1 className="text-2xl font-bold font-mono tracking-tight text-white flex items-center gap-2">
+      <div className="border-b border-neutral-200 dark:border-slate-800 pb-4">
+        <h1 className="text-2xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
           <Truck className="w-6 h-6 text-indigo-400" />
           <span>3PL Carrier Analytics & Performance Scorecards</span>
         </h1>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-neutral-600 dark:text-slate-400">
           On-Time Delivery compliance, carrier dock pickup lag, linehaul transit latency, and delivery failure rates.
         </p>
       </div>
@@ -33,7 +33,7 @@ export default function CarriersPage() {
       {/* Carrier Scorecards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {loading ? (
-          <div className="col-span-full py-12 text-center text-slate-400 text-sm">
+          <div className="col-span-full py-12 text-center text-neutral-600 dark:text-slate-400 text-sm">
             Loading carrier scorecards...
           </div>
         ) : (
@@ -49,13 +49,13 @@ export default function CarriersPage() {
                     ? "border-rose-800 bg-rose-950/20 shadow-lg shadow-rose-950/20"
                     : isMonitoring
                     ? "border-amber-800 bg-amber-950/15"
-                    : "border-slate-800 bg-[#111827]/90"
+                    : "border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827]/90"
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-base font-bold text-white font-mono">{car.carrier_name}</span>
+                      <span className="text-base font-bold text-neutral-900 dark:text-white font-mono">{car.carrier_name}</span>
                       <span
                         className={
                           isUnderperforming
@@ -68,19 +68,19 @@ export default function CarriersPage() {
                         {isUnderperforming ? "UNDERPERFORMING" : isMonitoring ? "MONITORING" : "OPTIMAL"}
                       </span>
                     </div>
-                    <div className="text-xs text-slate-400 font-mono mt-0.5">{car.service_type} • SLA: {car.base_sla_hours}h</div>
+                    <div className="text-xs text-neutral-600 dark:text-slate-400 font-mono mt-0.5">{car.service_type} • SLA: {car.base_sla_hours}h</div>
                   </div>
                 </div>
 
                 {/* On-Time Rate Metric */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-xs font-mono">
-                    <span className="text-slate-400">On-Time Delivery Rate</span>
+                    <span className="text-neutral-600 dark:text-slate-400">On-Time Delivery Rate</span>
                     <span className={`font-bold ${isUnderperforming ? "text-rose-400" : "text-emerald-400"}`}>
                       {car.avg_on_time_rate}%
                     </span>
                   </div>
-                  <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-neutral-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${
                         isUnderperforming ? "bg-rose-500" : isMonitoring ? "bg-amber-500" : "bg-emerald-500"
@@ -88,30 +88,30 @@ export default function CarriersPage() {
                       style={{ width: `${Math.min(100, car.avg_on_time_rate)}%` }}
                     ></div>
                   </div>
-                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <div className="flex justify-between text-[10px] text-neutral-600 dark:text-slate-400 font-mono">
                     <span>Benchmark: 95.0%</span>
                     <span>Cost: ₹{car.cost_per_kg}/kg</span>
                   </div>
                 </div>
 
                 {/* Metrics Breakdown Grid */}
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-slate-800">
-                  <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 text-[10px]">Avg Pickup Lag</span>
-                    <div className={`text-sm font-bold mt-0.5 ${car.avg_pickup_delay_hours > 3.5 ? "text-rose-400" : "text-slate-200"}`}>
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-neutral-200 dark:border-slate-800">
+                  <div className="p-2 rounded bg-neutral-50 dark:bg-slate-900/80 border border-neutral-200 dark:border-slate-800">
+                    <span className="text-neutral-600 dark:text-slate-400 text-[10px]">Avg Pickup Lag</span>
+                    <div className={`text-sm font-bold mt-0.5 ${car.avg_pickup_delay_hours > 3.5 ? "text-rose-400" : "text-neutral-800 dark:text-slate-200"}`}>
                       {car.avg_pickup_delay_hours} hrs
                     </div>
                   </div>
-                  <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 text-[10px]">Avg Linehaul Transit</span>
-                    <div className="text-sm font-bold text-slate-200 mt-0.5">{car.avg_transit_time_hours} hrs</div>
+                  <div className="p-2 rounded bg-neutral-50 dark:bg-slate-900/80 border border-neutral-200 dark:border-slate-800">
+                    <span className="text-neutral-600 dark:text-slate-400 text-[10px]">Avg Linehaul Transit</span>
+                    <div className="text-sm font-bold text-neutral-800 dark:text-slate-200 mt-0.5">{car.avg_transit_time_hours} hrs</div>
                   </div>
-                  <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 text-[10px]">Total Shipments</span>
-                    <div className="text-sm font-bold text-slate-200 mt-0.5">{car.total_shipments.toLocaleString()}</div>
+                  <div className="p-2 rounded bg-neutral-50 dark:bg-slate-900/80 border border-neutral-200 dark:border-slate-800">
+                    <span className="text-neutral-600 dark:text-slate-400 text-[10px]">Total Shipments</span>
+                    <div className="text-sm font-bold text-neutral-800 dark:text-slate-200 mt-0.5">{car.total_shipments.toLocaleString()}</div>
                   </div>
-                  <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 text-[10px]">Failed Deliveries</span>
+                  <div className="p-2 rounded bg-neutral-50 dark:bg-slate-900/80 border border-neutral-200 dark:border-slate-800">
+                    <span className="text-neutral-600 dark:text-slate-400 text-[10px]">Failed Deliveries</span>
                     <div className="text-sm font-bold text-amber-400 mt-0.5">{car.delivery_failed_count}</div>
                   </div>
                 </div>

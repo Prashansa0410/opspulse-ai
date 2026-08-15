@@ -25,20 +25,20 @@ export default function AnomaliesPage() {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-200 dark:border-slate-800 pb-4">
         <div>
-          <h1 className="text-2xl font-bold font-mono tracking-tight text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
             <AlertTriangle className="w-6 h-6 text-amber-400" />
             <span>Anomaly Center & Unsupervised Detection Hub</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-neutral-600 dark:text-slate-400">
             Real-time statistical anomaly monitoring across payment failure rates, warehouse processing saturation, carrier turnaround delays, and support queues.
           </p>
         </div>
 
         <button
           onClick={fetchAnomalies}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono transition-colors self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-slate-900 border border-neutral-200 dark:border-slate-800 text-neutral-700 dark:text-slate-300 hover:text-neutral-900 dark:text-white text-xs font-mono transition-colors self-start sm:self-auto"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Re-scan Anomaly Baselines</span>
@@ -47,12 +47,12 @@ export default function AnomaliesPage() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl border border-slate-800 bg-[#111827]/90">
-          <span className="text-xs font-mono text-slate-400">Active Anomalies</span>
-          <div className="text-2xl font-bold text-white font-mono mt-1">
+        <div className="p-4 rounded-xl border border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827]/90">
+          <span className="text-xs font-mono text-neutral-600 dark:text-slate-400">Active Anomalies</span>
+          <div className="text-2xl font-bold text-neutral-900 dark:text-white font-mono mt-1">
             {anomalies.length}
           </div>
-          <span className="text-[11px] text-slate-400">Evaluated against 7-day rolling baselines</span>
+          <span className="text-[11px] text-neutral-600 dark:text-slate-400">Evaluated against 7-day rolling baselines</span>
         </div>
 
         <div className="p-4 rounded-xl border border-rose-900/60 bg-rose-950/20">
@@ -74,16 +74,16 @@ export default function AnomaliesPage() {
 
       {/* Anomalies List */}
       <div className="space-y-4">
-        <h2 className="text-sm font-bold font-mono text-white uppercase tracking-wider">
+        <h2 className="text-sm font-bold font-mono text-neutral-900 dark:text-white uppercase tracking-wider">
           Detected Statistical Outliers & Process Anomalies
         </h2>
 
         {loading ? (
-          <div className="py-12 text-center text-slate-400 text-sm">
+          <div className="py-12 text-center text-neutral-600 dark:text-slate-400 text-sm">
             Scanning multi-variate operational metrics with Isolation Forest...
           </div>
         ) : anomalies.length === 0 ? (
-          <div className="p-8 rounded-xl border border-slate-800 bg-[#111827] text-center text-slate-400">
+          <div className="p-8 rounded-xl border border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-center text-neutral-600 dark:text-slate-400">
             All operational systems operating within normal 2-sigma thresholds.
           </div>
         ) : (
@@ -102,28 +102,28 @@ export default function AnomaliesPage() {
                     <span className={anom.severity === "CRITICAL" ? "badge-critical" : "badge-warning"}>
                       {anom.severity}
                     </span>
-                    <span className="text-sm font-bold text-white font-mono">{anom.metric_name}</span>
-                    <span className="text-xs text-slate-400 font-mono">({anom.entity_name})</span>
+                    <span className="text-sm font-bold text-neutral-900 dark:text-white font-mono">{anom.metric_name}</span>
+                    <span className="text-xs text-neutral-600 dark:text-slate-400 font-mono">({anom.entity_name})</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-xs font-mono">
-                    <span className="text-slate-400">Z-Score: <strong className="text-white font-bold">{anom.z_score}σ</strong></span>
-                    <span className="text-slate-400">Deviation: <strong className="text-rose-400">+{anom.deviation_percent}%</strong></span>
+                    <span className="text-neutral-600 dark:text-slate-400">Z-Score: <strong className="text-neutral-900 dark:text-white font-bold">{anom.z_score}σ</strong></span>
+                    <span className="text-neutral-600 dark:text-slate-400">Deviation: <strong className="text-rose-400">+{anom.deviation_percent}%</strong></span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-200 leading-relaxed font-sans">
+                <p className="text-xs text-neutral-800 dark:text-slate-200 leading-relaxed font-sans">
                   {anom.summary}
                 </p>
 
-                <div className="p-3 rounded-lg bg-slate-900/90 border border-slate-800/90 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div className="p-3 rounded-lg bg-neutral-50 dark:bg-slate-900/90 border border-neutral-200 dark:border-slate-800/90 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                   <div className="flex items-center gap-2">
                     <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span className="text-slate-300">
+                    <span className="text-neutral-700 dark:text-slate-300">
                       <strong>Root Cause Diagnostic:</strong> {anom.root_cause_hint}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 text-[11px] font-mono text-slate-400 shrink-0">
+                  <div className="flex items-center gap-4 text-[11px] font-mono text-neutral-600 dark:text-slate-400 shrink-0">
                     <span>Expected: {anom.expected_value}</span>
                     <span>Actual: <strong className="text-rose-400">{anom.actual_value}</strong></span>
                   </div>

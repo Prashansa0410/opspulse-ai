@@ -65,20 +65,20 @@ export default function ControlTowerPage() {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-200 dark:border-slate-800 pb-4">
         <div>
-          <h1 className="text-2xl font-bold font-mono tracking-tight text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold font-mono tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
             <Radio className="w-6 h-6 text-rose-500 animate-pulse" />
             <span>Operations Control Tower</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-neutral-600 dark:text-slate-400">
             Real-time telemetry, order fulfillment lifecycle, and active shipment monitoring across all fulfillment nodes.
           </p>
         </div>
 
         <button
           onClick={fetchOrders}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono transition-colors self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-slate-900 border border-neutral-200 dark:border-slate-800 text-neutral-700 dark:text-slate-300 hover:text-neutral-900 dark:text-white text-xs font-mono transition-colors self-start sm:self-auto"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Refresh Stream</span>
@@ -89,18 +89,18 @@ export default function ControlTowerPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         
         {/* Stream Ticker */}
-        <div className="lg:col-span-2 p-4 rounded-xl border border-slate-800 bg-[#111827]/90 space-y-2.5">
+        <div className="lg:col-span-2 p-4 rounded-xl border border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827]/90 space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-2">
+            <span className="text-xs font-mono uppercase tracking-wider text-neutral-600 dark:text-slate-400 font-semibold flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
               Live Event Streaming Pipeline (Kafka / In-Memory Buffer)
             </span>
             <span className="text-[11px] font-mono text-emerald-400">350 events/sec</span>
           </div>
 
-          <div className="bg-slate-950/80 rounded-lg p-3 border border-slate-800/80 font-mono text-xs text-slate-300 space-y-1.5 max-h-36 overflow-y-auto">
+          <div className="bg-slate-950/80 rounded-lg p-3 border border-slate-800/80 font-mono text-xs text-neutral-700 dark:text-slate-300 space-y-1.5 max-h-36 overflow-y-auto">
             {liveEvents.map((evt, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-[11px] text-slate-300">
+              <div key={idx} className="flex items-center gap-2 text-[11px] text-neutral-700 dark:text-slate-300">
                 <span className="text-blue-400">→</span>
                 <span>{evt}</span>
               </div>
@@ -109,19 +109,19 @@ export default function ControlTowerPage() {
         </div>
 
         {/* Operational Status Snapshot */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-[#111827]/90 space-y-3 flex flex-col justify-between">
-          <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+        <div className="p-4 rounded-xl border border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827]/90 space-y-3 flex flex-col justify-between">
+          <span className="text-xs font-mono uppercase tracking-wider text-neutral-600 dark:text-slate-400 font-semibold">
             Network Health Matrix
           </span>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-              <span className="text-slate-400">Active Warehouses</span>
-              <div className="text-base font-bold text-white mt-0.5">6 / 6 FCs</div>
+            <div className="p-2 rounded bg-neutral-50 dark:bg-slate-900/80 border border-neutral-200 dark:border-slate-800">
+              <span className="text-neutral-600 dark:text-slate-400">Active Warehouses</span>
+              <div className="text-base font-bold text-neutral-900 dark:text-white mt-0.5">6 / 6 FCs</div>
             </div>
-            <div className="p-2 rounded bg-slate-900/80 border border-slate-800">
-              <span className="text-slate-400">Carrier Partners</span>
-              <div className="text-base font-bold text-white mt-0.5">5 Carriers</div>
+            <div className="p-2 rounded bg-neutral-50 dark:bg-slate-900/80 border border-neutral-200 dark:border-slate-800">
+              <span className="text-neutral-600 dark:text-slate-400">Carrier Partners</span>
+              <div className="text-base font-bold text-neutral-900 dark:text-white mt-0.5">5 Carriers</div>
             </div>
             <div className="p-2 rounded bg-rose-950/40 border border-rose-900/60">
               <span className="text-rose-300">SLA Breach Alert</span>
@@ -137,15 +137,15 @@ export default function ControlTowerPage() {
       </div>
 
       {/* Orders Filter and Search Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-xl border border-slate-800 bg-[#111827]/90">
-        <div className="flex items-center gap-2 flex-1 max-w-md bg-slate-950/90 border border-slate-800 rounded-lg px-3 py-1.5 text-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-xl border border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827]/90">
+        <div className="flex items-center gap-2 flex-1 max-w-md bg-slate-950/90 border border-neutral-200 dark:border-slate-800 rounded-lg px-3 py-1.5 text-xs">
           <Search className="w-4 h-4 text-slate-500 shrink-0" />
           <input
             type="text"
             placeholder="Search by Order #, Customer, Warehouse, Carrier..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent text-white outline-none w-full placeholder:text-slate-500 font-sans"
+            className="bg-transparent text-neutral-900 dark:text-white outline-none w-full placeholder:text-slate-500 font-sans"
           />
         </div>
 
@@ -153,7 +153,7 @@ export default function ControlTowerPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono outline-none"
+            className="bg-white dark:bg-slate-950 border border-neutral-200 dark:border-slate-800 text-neutral-700 dark:text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono outline-none"
           >
             <option value="">All Statuses</option>
             <option value="DELIVERED">Delivered</option>
@@ -165,7 +165,7 @@ export default function ControlTowerPage() {
           <select
             value={breachFilter}
             onChange={(e) => setBreachFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono outline-none"
+            className="bg-white dark:bg-slate-950 border border-neutral-200 dark:border-slate-800 text-neutral-700 dark:text-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono outline-none"
           >
             <option value="">All SLAs</option>
             <option value="true">Breached SLA Only</option>
@@ -175,10 +175,10 @@ export default function ControlTowerPage() {
       </div>
 
       {/* Interactive Orders Table */}
-      <div className="rounded-xl border border-slate-800 bg-[#111827]/90 overflow-hidden">
+      <div className="rounded-xl border border-neutral-200 dark:border-slate-800 bg-white dark:bg-[#111827]/90 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-slate-900/90 text-slate-400 font-mono text-[11px] uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-neutral-50 dark:bg-slate-900/90 text-neutral-600 dark:text-slate-400 font-mono text-[11px] uppercase tracking-wider border-b border-neutral-200 dark:border-slate-800">
               <tr>
                 <th className="py-3 px-4">Order Number</th>
                 <th className="py-3 px-4">Customer</th>
@@ -190,28 +190,28 @@ export default function ControlTowerPage() {
                 <th className="py-3 px-4">SLA Verdict</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/80 text-slate-200">
+            <tbody className="divide-y divide-slate-800/80 text-neutral-800 dark:text-slate-200">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-slate-400 font-mono">
+                  <td colSpan={8} className="py-8 text-center text-neutral-600 dark:text-slate-400 font-mono">
                     Loading telemetry records from analytical warehouse...
                   </td>
                 </tr>
               ) : filteredOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-slate-400 font-mono">
+                  <td colSpan={8} className="py-8 text-center text-neutral-600 dark:text-slate-400 font-mono">
                     No matching orders found.
                   </td>
                 </tr>
               ) : (
                 filteredOrders.map((o) => (
-                  <tr key={o.order_id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={o.order_id} className="hover:bg-neutral-100 dark:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-semibold text-blue-400">
                       {o.order_number}
                     </td>
                     <td className="py-3 px-4">
                       <div>{o.customer_name}</div>
-                      <span className="text-[10px] text-slate-400 font-mono">{o.customer_tier}</span>
+                      <span className="text-[10px] text-neutral-600 dark:text-slate-400 font-mono">{o.customer_tier}</span>
                     </td>
                     <td className="py-3 px-4 font-mono">
                       {o.warehouse_code}
@@ -219,7 +219,7 @@ export default function ControlTowerPage() {
                     <td className="py-3 px-4">
                       {o.carrier_name}
                     </td>
-                    <td className="py-3 px-4 font-mono text-slate-400 text-[11px]">
+                    <td className="py-3 px-4 font-mono text-neutral-600 dark:text-slate-400 text-[11px]">
                       {o.order_date.substring(0, 16)}
                     </td>
                     <td className="py-3 px-4">
@@ -250,7 +250,7 @@ export default function ControlTowerPage() {
                           <span>On-Time</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1.5 text-slate-400 font-mono">
+                        <div className="flex items-center gap-1.5 text-neutral-600 dark:text-slate-400 font-mono">
                           <Clock className="w-3.5 h-3.5 shrink-0" />
                           <span>In-Flight</span>
                         </div>
