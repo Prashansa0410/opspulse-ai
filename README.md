@@ -179,10 +179,11 @@ pytest backend/tests/test_performance.py -s
 
 ## 8. Portfolio Demo Scripts
 
-### 🎙️ 60-Second Recruiter Demo Script
+### 
 > *"OpsPulse AI is an enterprise operational intelligence platform for high-volume commerce. In our live demo incident, a flash sale causes our Bangalore fulfillment center to saturate at 94.6% utilization, causing On-Time Delivery to drop by 5.1% and putting ₹3.24 Cr GMV at risk. When an operations leader clicks 'WHY?', our multi-stage attribution engine mathematically proves that 42% of the drop was warehouse packing delay and 34% was carrier dock lag. Simultaneously, our ML Gradient Boosting model scores in-flight shipments in sub-millisecond time. Leaders can ask our sandboxed AI Analyst natural language questions or launch our What-If Simulation Lab, which proves that shifting 18% volume to BLR-02 recovers On-Time Delivery to 93.6% and secures ₹1.38 Cr in GMV."*
 
-### 🎙️ 5-Minute Hiring Manager Technical Walkthrough
+###
+
 1. **Show Executive Overview**: Highlight headline KPIs, OTD trend curves, and the active incident alert.
 2. **Demonstrate Explainability**: Click the "WHY?" button to reveal the multi-dimensional attribution decomposition.
 3. **Inspect Warehouse & Carrier Analytics**: Review facility utilization gauges (BLR-01 at 94.6% vs BLR-02 at 55.2%) and carrier dock delay tiers.
