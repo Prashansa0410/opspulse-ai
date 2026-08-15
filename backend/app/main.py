@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backend.app.config import settings
 from backend.app.api.v1.router import api_router
 from backend.app.api.v1.live import router as live_router
 from backend.app.db.session import db_manager
@@ -19,7 +20,6 @@ async def lifespan(app: FastAPI):
     setup_structured_logging()
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION} ({settings.ENVIRONMENT})...")
 
-    # Initialize DB & Seed data if not already populated.
     try:
         conn = db_manager.get_connection()
         tables = conn.execute("SHOW TABLES;").fetchall()
@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
         logger.warning(f"Database initialization exception: {e}. Executing seed fallback...")
         run_seed(volume=settings.DATA_VOLUME, seed=settings.RANDOM_SEED)
 
-    # No background simulation. Live events are generated only on dashboard request.
+    # Request-driven live simulation: no always-on background worker.
     yield
 
     logger.info("Shutting down OpsPulse AI services...")
