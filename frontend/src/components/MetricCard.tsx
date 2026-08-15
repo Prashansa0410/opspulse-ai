@@ -34,24 +34,24 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   const isPositive = delta !== undefined && delta >= 0;
   const isGood = isPositive === isPositiveGood;
 
-  const borderColor =
+  const severityStyles =
     severity === "critical"
-      ? "border-rose-800/80 bg-rose-950/20"
+      ? "border-t-2 border-t-rose-500 border-x-neutral-900 border-b-neutral-900 bg-[#0a0a0a]"
       : severity === "warning"
-      ? "border-amber-800/70 bg-amber-950/15"
-      : "border-slate-800/80 bg-[#111827]/90";
+      ? "border-t-2 border-t-amber-500 border-x-neutral-900 border-b-neutral-900 bg-[#0a0a0a]"
+      : "border-neutral-900 bg-[#0a0a0a]";
 
   return (
-    <div className={`p-4 rounded-xl border ${borderColor} flex flex-col justify-between transition-all hover:border-slate-700 shadow-sm`}>
+    <div className={`p-5 rounded-lg border ${severityStyles} flex flex-col justify-between transition-colors hover:border-neutral-800`}>
       <div className="flex items-start justify-between">
         <span className="text-xs font-medium text-slate-400">{title}</span>
         {hasWhyButton && (
           <button
             onClick={onWhyClick}
-            className="flex items-center gap-1 px-2 py-0.5 rounded bg-blue-950/90 text-blue-400 border border-blue-700/80 text-[11px] font-mono font-bold hover:bg-blue-900/90 hover:text-white transition-all shadow-sm"
+            className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 text-blue-400 text-[10px] font-mono tracking-wide hover:bg-neutral-800 transition-colors"
           >
             <Sparkles className="w-3 h-3" />
-            <span>WHY?</span>
+            <span>DIAGNOSE</span>
           </button>
         )}
       </div>
