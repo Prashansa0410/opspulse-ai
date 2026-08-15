@@ -144,7 +144,7 @@ class SLARiskModel:
                 self.train()
 
         vec = [features.get(name, 0.0) for name in self.feature_names]
-        X = np.array([vec])
+        X = pd.DataFrame([vec], columns=self.feature_names)
 
         if self.model is not None:
             prob = float(self.model.predict_proba(X)[0][1])

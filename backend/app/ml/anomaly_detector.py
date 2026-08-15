@@ -42,32 +42,32 @@ class AnomalyDetector:
         if not pay_df.empty:
             for provider, group in pay_df.groupby("provider"):
                 rates = group["failure_rate"].values
-                if len(rates) >= 4:
-                    mean = np.mean(rates[:-1])
-                    std = max(0.1, np.std(rates[:-1]))
-                    latest_rate = rates[-1]
-                    z = (latest_rate - mean) / std
+                mean = np.mean(rates)
+                std = max(0.1, np.std(rates))
+                max_rate = float(np.max(rates))
+                latest_rate = rates[-1]
+                z = float((max_rate - mean) / std)
 
-                    if z >= 2.2 or latest_rate > 5.0:
-                        anomalies.append({
-                            "anomaly_id": f"ANOM_PAY_{uuid.uuid4().hex[:6].upper()}",
-                            "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                            "metric_name": "Payment Gateway Failure Rate",
-                            "entity_type": "PAYMENT_PROVIDER",
-                            "entity_id": provider,
-                            "entity_name": f"{provider} Payment Gateway",
-                            "severity": "CRITICAL" if z >= 3.0 or latest_rate > 6.0 else "WARNING",
-                            "expected_value": round(float(mean), 2),
-                            "actual_value": round(float(latest_rate), 2),
-                            "deviation_percent": round(float(((latest_rate - mean) / max(0.1, mean)) * 100.0), 1),
-                            "z_score": round(float(z), 2),
-                            "summary": f"{provider} failure rate spiked to {latest_rate}% (Baseline: {mean:.1f}%, Z-Score: {z:.1f})",
-                            "root_cause_hint": "Gateway timeout errors / API latency on acquiring bank upstream",
-                            "is_active": True
-                        })
+                if max_rate > 5.0 or z >= 1.8:
+                    anomalies.append({
+                        "anomaly_id": f"ANOM_PAY_{uuid.uuid4().hex[:6].upper()}",
+                        "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "metric_name": "Payment Gateway Failure Rate Spike",
+                        "entity_type": "PAYMENT_PROVIDER",
+                        "entity_id": provider,
+                        "entity_name": f"{provider} Gateway",
+                        "severity": "CRITICAL" if max_rate > 10.0 or z >= 2.5 else "WARNING",
+                        "expected_value": round(float(mean), 2),
+                        "actual_value": round(float(max_rate), 2),
+                        "deviation_percent": round(float(((max_rate - mean) / max(0.1, mean)) * 100.0), 1),
+                        "z_score": round(float(z), 2),
+                        "summary": f"{provider} failure rate spiked to {max_rate}% (Baseline: {mean:.1f}%, Z-Score: {z:.1f})",
+                        "root_cause_hint": "Gateway timeout errors / API latency on acquiring bank upstream",
+                        "is_active": True
+                    })
 
         # -------------------------------------------------------------
-        # 2. Warehouse Packing Duration Anomaly
+        # 2. Warehouse Packing Duration & Saturation Anomaly
         # -------------------------------------------------------------
         wh_df = pd.DataFrame(conn.execute("""
             SELECT
@@ -86,30 +86,29 @@ class AnomalyDetector:
                 pack_times = group["avg_packing_time_hours"].values
                 utils = group["utilization_rate"].values
 
-                if len(pack_times) >= 3:
-                    mean_pack = np.mean(pack_times[:-1])
-                    std_pack = max(0.2, np.std(pack_times[:-1]))
-                    latest_pack = pack_times[-1]
-                    latest_util = utils[-1]
-                    z_pack = (latest_pack - mean_pack) / std_pack
+                mean_pack = np.mean(pack_times)
+                std_pack = max(0.2, np.std(pack_times))
+                max_pack = float(np.max(pack_times))
+                max_util = float(np.max(utils))
+                z_pack = float((max_pack - mean_pack) / std_pack)
 
-                    if z_pack >= 2.0 or latest_util > 0.85:
-                        anomalies.append({
-                            "anomaly_id": f"ANOM_WH_{uuid.uuid4().hex[:6].upper()}",
-                            "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                            "metric_name": "Warehouse Packing Duration & Saturation",
-                            "entity_type": "WAREHOUSE",
-                            "entity_id": wh_id,
-                            "entity_name": wh_name,
-                            "severity": "CRITICAL" if latest_util > 0.90 else "WARNING",
-                            "expected_value": round(float(mean_pack), 2),
-                            "actual_value": round(float(latest_pack), 2),
-                            "deviation_percent": round(float(((latest_pack - mean_pack) / max(0.1, mean_pack)) * 100.0), 1),
-                            "z_score": round(float(z_pack), 2),
-                            "summary": f"{wh_name} packing time escalated to {latest_pack:.1f}h (Utilization: {latest_util*100:.1f}%)",
-                            "root_cause_hint": "Order intake volume exceeded sorting conveyor and packing station throughput",
-                            "is_active": True
-                        })
+                if max_util > 0.80 or max_pack > 5.0 or z_pack >= 1.8:
+                    anomalies.append({
+                        "anomaly_id": f"ANOM_WH_{uuid.uuid4().hex[:6].upper()}",
+                        "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "metric_name": "Warehouse Capacity Saturation & Packing Delay",
+                        "entity_type": "WAREHOUSE",
+                        "entity_id": wh_id,
+                        "entity_name": wh_name,
+                        "severity": "CRITICAL" if max_util > 0.90 else "WARNING",
+                        "expected_value": round(float(mean_pack), 2),
+                        "actual_value": round(float(max_pack), 2),
+                        "deviation_percent": round(float(((max_pack - mean_pack) / max(0.1, mean_pack)) * 100.0), 1),
+                        "z_score": round(float(z_pack), 2),
+                        "summary": f"{wh_name} packing time escalated to {max_pack:.1f}h (Utilization: {max_util*100:.1f}%)",
+                        "root_cause_hint": "Order intake volume exceeded sorting conveyor and packing station throughput",
+                        "is_active": True
+                    })
 
         # -------------------------------------------------------------
         # 3. Carrier Pickup Delay Anomaly
@@ -129,29 +128,28 @@ class AnomalyDetector:
             for car_id, group in car_df.groupby("carrier_id"):
                 car_name = group["carrier_name"].iloc[0]
                 pickups = group["avg_pickup_delay_hours"].values
-                if len(pickups) >= 3:
-                    mean_p = np.mean(pickups[:-1])
-                    std_p = max(0.2, np.std(pickups[:-1]))
-                    latest_p = pickups[-1]
-                    z_p = (latest_p - mean_p) / std_p
+                mean_p = np.mean(pickups)
+                std_p = max(0.2, np.std(pickups))
+                max_p = float(np.max(pickups))
+                z_p = float((max_p - mean_p) / std_p)
 
-                    if z_p >= 2.0 or latest_p > 5.0:
-                        anomalies.append({
-                            "anomaly_id": f"ANOM_CAR_{uuid.uuid4().hex[:6].upper()}",
-                            "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                            "metric_name": "Carrier Dock Handoff Delay",
-                            "entity_type": "CARRIER",
-                            "entity_id": car_id,
-                            "entity_name": car_name,
-                            "severity": "CRITICAL" if latest_p > 7.0 else "WARNING",
-                            "expected_value": round(float(mean_p), 2),
-                            "actual_value": round(float(latest_p), 2),
-                            "deviation_percent": round(float(((latest_p - mean_p) / max(0.1, mean_p)) * 100.0), 1),
-                            "z_score": round(float(z_p), 2),
-                            "summary": f"{car_name} pickup delay reached {latest_p:.1f}h (Baseline: {mean_p:.1f}h)",
-                            "root_cause_hint": "Truck availability deficit and linehaul dispatch bottleneck",
-                            "is_active": True
-                        })
+                if max_p > 4.5 or z_p >= 1.8:
+                    anomalies.append({
+                        "anomaly_id": f"ANOM_CAR_{uuid.uuid4().hex[:6].upper()}",
+                        "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "metric_name": "Carrier Dock Handoff Delay",
+                        "entity_type": "CARRIER",
+                        "entity_id": car_id,
+                        "entity_name": car_name,
+                        "severity": "CRITICAL" if max_p > 7.0 else "WARNING",
+                        "expected_value": round(float(mean_p), 2),
+                        "actual_value": round(float(max_p), 2),
+                        "deviation_percent": round(float(((max_p - mean_p) / max(0.1, mean_p)) * 100.0), 1),
+                        "z_score": round(float(z_p), 2),
+                        "summary": f"{car_name} pickup delay reached {max_p:.1f}h (Baseline: {mean_p:.1f}h)",
+                        "root_cause_hint": "Truck availability deficit and linehaul dispatch bottleneck",
+                        "is_active": True
+                    })
 
         # Persist detected anomalies into fct_anomaly_events table
         conn.execute("DELETE FROM fct_anomaly_events;")

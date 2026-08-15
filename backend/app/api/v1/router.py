@@ -1,7 +1,7 @@
 """FastAPI REST API Router for OpsPulse AI."""
 import os
-import psutil
 import time
+import resource
 from typing import Any, Optional
 from fastapi import APIRouter, Query, HTTPException, Depends
 from pydantic import BaseModel, Field
@@ -288,6 +288,6 @@ def get_system_health():
         "system_metrics": {
             "server_time": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
             "cpu_count": os.cpu_count(),
-            "memory_usage_mb": round(psutil.Process().memory_info().rss / (1024 * 1024), 2) if hasattr(psutil, 'Process') else 45.2
+            "memory_usage_mb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / (1024 * 1024), 2)
         }
     }

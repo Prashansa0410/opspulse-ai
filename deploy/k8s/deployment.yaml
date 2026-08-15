@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opspulse-backend
+  labels:
+    app: opspulse-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opspulse-backend
+  template:
+    metadata:
+      labels:
+        app: opspulse-backend
+    spec:
+      containers:
+      - name: backend
+        image: opspulse-backend:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opspulse-backend-service
+spec:
+  selector:
+    app: opspulse-backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opspulse-frontend
+  labels:
+    app: opspulse-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opspulse-frontend
+  template:
+    metadata:
+      labels:
+        app: opspulse-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: opspulse-frontend:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opspulse-frontend-service
+spec:
+  selector:
+    app: opspulse-frontend
+  ports:
+  - port: 3000
+    targetPort: 3000

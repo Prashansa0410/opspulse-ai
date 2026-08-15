@@ -24,8 +24,7 @@ class RootCauseEngine:
                 AVG(avg_carrier_pickup_delay_hours) AS baseline_pickup_hrs,
                 AVG(avg_transit_hours) AS baseline_transit_hrs
             FROM fct_daily_kpis
-            WHERE kpi_date < (SELECT MIN(kpi_date) FROM fct_daily_kpis) + INTERVAL '21 days'
-               OR kpi_date IS NOT NULL
+            WHERE CAST(kpi_date AS DATE) <= CAST((SELECT MIN(kpi_date) FROM fct_daily_kpis) AS DATE) + INTERVAL '20 days'
             LIMIT 1;
         """).fetchone()
 
@@ -63,7 +62,7 @@ class RootCauseEngine:
                 w.code,
                 COUNT(o.order_id) AS total_orders,
                 COUNT(CASE WHEN o.is_sla_breached THEN 1 END) AS breach_count,
-                ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / MAX(1, COUNT(o.order_id))) * 100.0, 1) AS wh_breach_rate,
+                ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / GREATEST(1, COUNT(o.order_id))) * 100.0, 1) AS wh_breach_rate,
                 SUM(CASE WHEN o.is_sla_breached THEN o.total_amount ELSE 0 END) AS gmv_at_risk,
                 ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / ?) * 100.0, 1) AS share_of_total_breaches
             FROM warehouses w
@@ -93,7 +92,7 @@ class RootCauseEngine:
                 c.name AS carrier_name,
                 COUNT(s.shipment_id) AS total_shipments,
                 COUNT(CASE WHEN o.is_sla_breached THEN 1 END) AS delayed_shipments,
-                ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / MAX(1, COUNT(s.shipment_id))) * 100.0, 1) AS delay_rate,
+                ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / GREATEST(1, COUNT(s.shipment_id))) * 100.0, 1) AS delay_rate,
                 ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / ?) * 100.0, 1) AS share_of_delays
             FROM carriers c
             JOIN shipments s ON c.carrier_id = s.carrier_id
@@ -121,7 +120,7 @@ class RootCauseEngine:
                 r.name AS region_name,
                 COUNT(o.order_id) AS total_orders,
                 COUNT(CASE WHEN o.is_sla_breached THEN 1 END) AS breach_count,
-                ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / MAX(1, COUNT(o.order_id))) * 100.0, 1) AS breach_rate,
+                ROUND((COUNT(CASE WHEN o.is_sla_breached THEN 1 END) * 1.0 / GREATEST(1, COUNT(o.order_id))) * 100.0, 1) AS breach_rate,
                 SUM(CASE WHEN o.is_sla_breached THEN o.total_amount ELSE 0 END) AS gmv_at_risk
             FROM regions r
             JOIN orders o ON r.region_id = o.region_id
@@ -147,7 +146,7 @@ class RootCauseEngine:
                 p.category,
                 COUNT(DISTINCT o.order_id) AS orders_count,
                 COUNT(DISTINCT CASE WHEN o.is_sla_breached THEN o.order_id END) AS breach_orders_count,
-                ROUND((COUNT(DISTINCT CASE WHEN o.is_sla_breached THEN o.order_id END) * 1.0 / MAX(1, COUNT(DISTINCT o.order_id))) * 100.0, 1) AS category_breach_rate
+                ROUND((COUNT(DISTINCT CASE WHEN o.is_sla_breached THEN o.order_id END) * 1.0 / GREATEST(1, COUNT(DISTINCT o.order_id))) * 100.0, 1) AS category_breach_rate
             FROM products p
             JOIN order_items oi ON p.product_id = oi.product_id
             JOIN orders o ON oi.order_id = o.order_id

@@ -107,30 +107,8 @@ Always distinguish historical observed facts from simulated model predictions.
 **Healthy Alternative Hub**: `WH_BLR_02` has available headroom at **55.2%** utilization and can absorb up to 600 orders/day immediately.
 """
 
-        # 4. "Which shipments should we prioritize / high risk / SLA risk?"
-        elif any(w in prompt_lower for w in ["prioritize", "risk", "shipment", "in-flight", "predict", "breach"]):
-            high_risk = tool_registry.get_sla_risk(limit=5)
-            tool_calls_executed.append({
-                "tool": "get_sla_risk",
-                "args": {"limit": 5},
-                "status": "SUCCESS"
-            })
-            citations.append("ML Gradient Boosting SLA Risk Classifier, shipments table")
-
-            rows_formatted = ""
-            for item in high_risk[:4]:
-                rows_formatted += f"- **{item['order_number']}** ({item['warehouse']}) | Risk: **{item['risk_score']*100:.0f}%** ({item['risk_level']}) | Val: ₹{item['order_value']:,.0f} | Route: {item['route']}\n"
-
-            response_text = f"""### High-Risk In-Flight Shipments (ML SLA Breach Model)
-
-Our predictive Gradient Boosting model identified high-probability breach risks among active shipments:
-
-{rows_formatted}
-**Recommended Operational Action**: Tag these shipments for **Priority Dock Handoff** and route via air courier expedited dispatch.
-"""
-
-        # 5. "What should we do / recommendations / actions / simulate?"
-        elif any(w in prompt_lower for w in ["what should we do", "recommend", "action", "simulate", "intervention", "what if"]):
+        # 4. "What should we do / recommendations / actions / simulate?"
+        elif any(w in prompt_lower for w in ["what should we do", "recommend", "action", "simulate", "intervention", "what if", "fix", "solve", "how to"]):
             sim_res = tool_registry.simulate_intervention()
             tool_calls_executed.append({
                 "tool": "simulate_intervention",
@@ -150,6 +128,28 @@ Our predictive Gradient Boosting model identified high-probability breach risks 
 
 #### Tactical Recommendation 2: Carrier Route Diversion
 - Reassign 25% of SwiftExpress South shipments to BlueDart Prime priority ground.
+"""
+
+        # 5. "Which shipments should we prioritize / high risk / SLA risk?"
+        elif any(w in prompt_lower for w in ["prioritize", "risk", "in-flight", "predict"]):
+            high_risk = tool_registry.get_sla_risk(limit=5)
+            tool_calls_executed.append({
+                "tool": "get_sla_risk",
+                "args": {"limit": 5},
+                "status": "SUCCESS"
+            })
+            citations.append("ML Gradient Boosting SLA Risk Classifier, shipments table")
+
+            rows_formatted = ""
+            for item in high_risk[:4]:
+                rows_formatted += f"- **{item['order_number']}** ({item['warehouse']}) | Risk: **{item['risk_score']*100:.0f}%** ({item['risk_level']}) | Val: ₹{item['order_value']:,.0f} | Route: {item['route']}\n"
+
+            response_text = f"""### High-Risk In-Flight Shipments (ML SLA Breach Model)
+
+Our predictive Gradient Boosting model identified high-probability breach risks among active shipments:
+
+{rows_formatted}
+**Recommended Operational Action**: Tag these shipments for **Priority Dock Handoff** and route via air courier expedited dispatch.
 """
 
         # 6. Default / SQL / General KPI Summary
