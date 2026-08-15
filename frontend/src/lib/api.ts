@@ -16,6 +16,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
   const res = await fetch(url, {
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       ...options?.headers,
@@ -24,7 +25,13 @@ async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   });
 
   if (!res.ok) {
-    throw new Error(`API call failed [${res.status}]: ${res.statusText}`);
+    let detail = "";
+    try {
+      detail = await res.text();
+    } catch {
+      // Ignore response parsing failures and preserve the HTTP error.
+    }
+    throw new Error(`API call failed [${res.status}]: ${res.statusText}${detail ? ` — ${detail.slice(0, 300)}` : ""}`);
   }
   return res.json();
 }
@@ -32,7 +39,7 @@ async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
 export const api = {
   // KPIs
   getKPIs: async (days: number = 30): Promise<{ status: string; summary: ExecutiveSummary; timeseries: KPITimeseriesItem[] }> => {
-    return fetchJson(`/kpis?days=${days}`);
+    return fetchJson(`/kpis?days=${days}&_ts=${Date.now()}`);
   },
 
   // Warehouses
