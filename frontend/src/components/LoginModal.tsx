@@ -34,8 +34,19 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   const handleDemoLogin = async (role: "exec" | "ops" | "data") => {
-    const usr = `${role}@opspulse.ai`;
-    const pwd = "demo123";
+    let usr = "";
+    let pwd = "";
+    if (role === "exec") {
+      usr = "exec@opspulse.ai";
+      pwd = "Executive123!";
+    } else if (role === "ops") {
+      usr = "ops@opspulse.ai";
+      pwd = "OpsManager123!";
+    } else if (role === "data") {
+      usr = "analyst@opspulse.ai";
+      pwd = "DataAnalyst123!";
+    }
+    
     setUsername(usr);
     setPassword(pwd);
     
