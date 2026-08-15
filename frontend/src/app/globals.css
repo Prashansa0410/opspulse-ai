@@ -4,53 +4,53 @@
 
 @layer base {
   :root {
-    --bg-primary: #090d16;
-    --bg-secondary: #0f172a;
-    --bg-card: #141e33;
-    --border-color: #1e293b;
-    --border-subtle: #27354f;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #121212;
+    --bg-card: #171717;
+    --border-color: #262626;
+    --border-subtle: #1f1f1f;
+    --text-primary: #ededed;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
   }
 
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0f17;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 3px;
+  background: #262626;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #404040;
 }
 
-/* Utility Badges */
+/* Utility Badges - Minimalist, less noisy borders */
 .badge-critical {
-  @apply bg-rose-950/70 text-rose-300 border border-rose-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+  @apply bg-rose-950/40 text-rose-400 border border-rose-900/50 px-2 py-0.5 rounded text-[11px] font-mono tracking-wide;
 }
 .badge-warning {
-  @apply bg-amber-950/70 text-amber-300 border border-amber-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+  @apply bg-amber-950/40 text-amber-400 border border-amber-900/50 px-2 py-0.5 rounded text-[11px] font-mono tracking-wide;
 }
 .badge-success {
-  @apply bg-emerald-950/70 text-emerald-300 border border-emerald-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+  @apply bg-emerald-950/40 text-emerald-400 border border-emerald-900/50 px-2 py-0.5 rounded text-[11px] font-mono tracking-wide;
 }
 .badge-info {
-  @apply bg-blue-950/70 text-blue-300 border border-blue-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+  @apply bg-blue-950/40 text-blue-400 border border-blue-900/50 px-2 py-0.5 rounded text-[11px] font-mono tracking-wide;
 }
 .badge-neutral {
-  @apply bg-slate-800 text-slate-300 border border-slate-700 px-2 py-0.5 rounded text-xs font-mono;
+  @apply bg-neutral-900/80 text-neutral-400 border border-neutral-800 px-2 py-0.5 rounded text-[11px] font-mono tracking-wide;
 }
