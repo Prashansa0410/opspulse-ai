@@ -20,24 +20,41 @@ export default function ExecutiveOverviewPage() {
   const [isWhyModalOpen, setIsWhyModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const refreshDashboard = async () => {
+  const loadDashboard = async () => {
     setLoading(true);
     try {
-      // Generate only a bounded batch when a real dashboard refresh occurs.
+      // A normal page load/refresh is read-only. It must NOT create new orders.
+      const res = await api.getKPIs(30);
+      setSummary(res.summary);
+      setTimeseries(res.timeseries);
+    } catch (err) {
+      console.error("Error loading OpsPulse data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateAndRefresh = async () => {
+    setLoading(true);
+    try {
+      // Live traffic is generated only by the scheduled tick while the dashboard is open.
       await api.generateLiveEvents();
       const res = await api.getKPIs(30);
       setSummary(res.summary);
       setTimeseries(res.timeseries);
     } catch (err) {
-      console.error("Error loading live OpsPulse data:", err);
+      console.error("Error refreshing live OpsPulse data:", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    refreshDashboard();
-    const interval = window.setInterval(refreshDashboard, 60_000);
+    // Initial page load: read existing data only.
+    loadDashboard();
+
+    // Simulate streaming traffic once per minute while the dashboard is open.
+    const interval = window.setInterval(generateAndRefresh, 60_000);
     return () => window.clearInterval(interval);
   }, []);
 
