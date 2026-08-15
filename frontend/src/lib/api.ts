@@ -26,6 +26,7 @@ async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   }
 
   const res = await fetch(url, {
+    cache: "no-store",
     headers: {
       ...headers,
       ...options?.headers,
@@ -41,8 +42,9 @@ async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
         window.location.href = "/";
       }
     }
-    const errorText = await res.text().catch(() => "Unknown error");
-    throw new Error(`API call failed [${res.status}]: ${errorText}`);
+    let detail = "";
+    try { detail = await res.text(); } catch { /* preserve HTTP error */ }
+    throw new Error(`API call failed [${res.status}]: ${res.statusText}${detail ? ` — ${detail.slice(0, 300)}` : ""}`);
   }
   return res.json();
 }
@@ -54,8 +56,6 @@ export const api = {
 
   // Auth
   login: async (credentials: any): Promise<{ access_token: string }> => {
-    // FastAPI OAuth2PasswordRequestForm expects form data, but our custom /auth/login accepts JSON or Form.
-    // Let's use x-www-form-urlencoded
     const params = new URLSearchParams();
     params.append("username", credentials.username);
     params.append("password", credentials.password);
@@ -70,22 +70,19 @@ export const api = {
     return res.json();
   },
 
+  // Generate a small bounded batch of fresh operational events on demand.
+  generateLiveEvents: async (): Promise<{ status: string; orders_created: number; sla_breaches_created: number; payment_failures_created: number; generated_at: string }> => {
+    return fetchJson("/live/tick", { method: "POST" });
+  },
+
   // KPIs
   getKPIs: async (days: number = 30): Promise<{ status: string; summary: ExecutiveSummary; timeseries: KPITimeseriesItem[] }> => {
-    return fetchJson(`/kpis?days=${days}`);
+    return fetchJson(`/kpis?days=${days}&_ts=${Date.now()}`);
   },
 
   // Warehouses
-  getWarehouses: async (): Promise<{ status: string; total_warehouses: number; data: WarehouseScorecard[] }> => {
-    return fetchJson("/warehouses");
-  },
-
-  // Carriers
-  getCarriers: async (): Promise<{ status: string; total_carriers: number; data: CarrierScorecard[] }> => {
-    return fetchJson("/carriers");
-  },
-
-  // Orders
+  getWarehouses: async (): Promise<{ status: string; total_warehouses: number; data: WarehouseScorecard[] }> => fetchJson("/warehouses"),
+  getCarriers: async (): Promise<{ status: string; total_carriers: number; data: CarrierScorecard[] }> => fetchJson("/carriers"),
   getOrders: async (params?: Record<string, any>): Promise<any> => {
     const query = new URLSearchParams(params || {}).toString();
     return fetchJson(`/orders?${query}`);

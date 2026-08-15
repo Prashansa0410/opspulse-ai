@@ -4,6 +4,7 @@ import { Navbar } from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import { PersonaProvider } from "../components/PersonaSwitcher";
 import { AuthProvider } from "../lib/auth";
+import { LiveRefresh } from "../components/LiveRefresh";
 
 export const metadata: Metadata = {
   title: "OpsPulse AI — AI-Powered Operational Intelligence & Decision Support",
@@ -27,6 +28,7 @@ export default function RootLayout({
                 {children}
               </main>
             </div>
+            <LiveRefresh />
           </PersonaProvider>
         </AuthProvider>
       </body>
