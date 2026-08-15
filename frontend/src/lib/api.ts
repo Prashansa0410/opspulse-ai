@@ -56,15 +56,14 @@ export const api = {
 
   // Auth
   login: async (credentials: any): Promise<{ access_token: string }> => {
-    const params = new URLSearchParams();
-    params.append("username", credentials.username);
-    params.append("password", credentials.password);
-
     const url = `${API_BASE}/auth/login`;
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params.toString()
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: credentials.username, // mapping username field to email
+        password: credentials.password
+      })
     });
     if (!res.ok) throw new Error("Login failed");
     return res.json();
