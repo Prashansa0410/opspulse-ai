@@ -52,13 +52,13 @@ export default function AIAnalystPage() {
     <div className="space-y-6 max-w-5xl mx-auto animate-fadeIn">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-900 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-200 dark:border-neutral-900 pb-4">
         <div>
-          <h1 className="text-2xl font-bold font-mono tracking-tight text-neutral-100 flex items-center gap-2">
+          <h1 className="text-2xl font-bold font-mono tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
             <Terminal className="w-5 h-5 text-neutral-400" />
             <span>AI Operations Analyst</span>
           </h1>
-          <p className="text-xs text-neutral-500 pt-1">
+          <p className="text-xs text-neutral-600 dark:text-neutral-500 pt-1">
             Autonomous decision intelligence agent with verified SQL execution and tool calling.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function AIAnalystPage() {
               key={idx}
               onClick={() => handleSend(p)}
               disabled={loading}
-              className="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-xs font-medium transition-all text-left shadow-sm disabled:opacity-50"
+              className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900/90 border border-neutral-200 dark:border-slate-800 text-neutral-600 dark:text-slate-300 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-slate-700 text-xs font-medium transition-all text-left shadow-sm disabled:opacity-50"
             >
               {p}
             </button>
@@ -98,19 +98,19 @@ export default function AIAnalystPage() {
         }}
         className="relative"
       >
-        <div className="flex items-center gap-2 p-1.5 rounded border border-neutral-800 bg-[#0a0a0a] focus-within:border-neutral-600 transition-colors">
+        <div className="flex items-center gap-2 p-1.5 rounded border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0a0a0a] focus-within:border-neutral-400 dark:focus-within:border-neutral-600 transition-colors">
           <input
             type="text"
             placeholder="Ask anything about orders, bottlenecks, carrier delays..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             disabled={loading}
-            className="w-full bg-transparent text-neutral-100 px-3 py-2 text-sm outline-none placeholder:text-neutral-600"
+            className="w-full bg-transparent text-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-600"
           />
           <button
             type="submit"
             disabled={loading || !prompt.trim()}
-            className="flex items-center gap-1.5 px-4 py-2 rounded bg-neutral-100 hover:bg-white disabled:bg-neutral-900 disabled:text-neutral-600 text-neutral-900 text-xs font-bold transition-colors shrink-0"
+            className="flex items-center gap-1.5 px-4 py-2 rounded bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-white disabled:bg-neutral-100 dark:disabled:bg-neutral-900 disabled:text-neutral-400 dark:disabled:text-neutral-600 text-white dark:text-neutral-900 text-xs font-bold transition-colors shrink-0"
           >
             {loading ? <Clock className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             <span>Analyze</span>
@@ -121,15 +121,15 @@ export default function AIAnalystPage() {
       {/* Conversation Thread */}
       <div className="space-y-6">
         {conversation.map((msg, idx) => (
-          <div key={idx} className="p-5 rounded border border-neutral-900 bg-[#0a0a0a] space-y-4">
+          <div key={idx} className="p-5 rounded border border-neutral-200 dark:border-neutral-900 bg-white dark:bg-[#0a0a0a] space-y-4">
             
             {/* User Question */}
-            <div className="flex items-center justify-between border-b border-neutral-900 pb-3">
+            <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-6 h-6 flex items-center justify-center text-neutral-500 text-xs font-mono font-bold">
                   &gt;
                 </div>
-                <h3 className="text-sm font-semibold text-neutral-200 font-sans tracking-tight">{msg.query}</h3>
+                <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 font-sans tracking-tight">{msg.query}</h3>
               </div>
               <div className="flex items-center gap-3 text-[11px] font-mono text-neutral-600">
                 <span>Latency: <strong className="text-neutral-400">{msg.latency_ms}ms</strong></span>
@@ -139,7 +139,7 @@ export default function AIAnalystPage() {
 
             {/* Tool Calls Execution Trace */}
             {msg.tool_calls && msg.tool_calls.length > 0 && (
-              <div className="p-3 rounded bg-neutral-900/50 border border-neutral-900 space-y-1.5">
+              <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-900 space-y-1.5">
                 <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
                   <Terminal className="w-3 h-3 text-neutral-400" />
                   <span>Tools & SQL Executed ({msg.tool_calls.length})</span>
@@ -157,7 +157,7 @@ export default function AIAnalystPage() {
             )}
 
             {/* AI Formatted Response */}
-            <div className="text-sm text-neutral-300 leading-relaxed font-sans prose prose-invert max-w-none space-y-2">
+            <div className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans prose dark:prose-invert max-w-none space-y-2">
               <div className="whitespace-pre-line">
                 {msg.response}
               </div>
@@ -165,7 +165,7 @@ export default function AIAnalystPage() {
 
             {/* Citations & Evidence Footnote */}
             {msg.citations && msg.citations.length > 0 && (
-              <div className="pt-3 border-t border-neutral-900 flex items-center gap-2 text-[10px] font-mono text-neutral-500">
+              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-900 flex items-center gap-2 text-[10px] font-mono text-neutral-500">
                 <FileCode className="w-3.5 h-3.5 shrink-0" />
                 <span>Verified Sources: {msg.citations.join(" • ")}</span>
               </div>

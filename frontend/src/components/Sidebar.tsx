@@ -67,7 +67,7 @@ export const Sidebar: React.FC = () => {
   })).filter(group => group.items.length > 0);
 
   return (
-    <aside className="w-64 shrink-0 border-r border-neutral-900 bg-[#0a0a0a] flex flex-col justify-between p-4 hidden md:flex min-h-[calc(100vh-57px)]">
+    <aside className="w-64 shrink-0 border-r border-neutral-200 dark:border-neutral-900 bg-white dark:bg-[#0a0a0a] flex flex-col justify-between p-4 hidden md:flex min-h-[calc(100vh-57px)]">
       <div className="space-y-6">
         {navigationItems.map((group, gIdx) => (
           <div key={gIdx} className="space-y-2">
@@ -83,12 +83,12 @@ export const Sidebar: React.FC = () => {
                     href={item.href}
                     className={`flex items-center justify-between px-2.5 py-1.5 rounded text-[13px] font-medium transition-colors ${
                       isActive
-                        ? "bg-neutral-900 text-neutral-100 font-semibold"
-                        : "text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900/50"
+                        ? "bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-semibold"
+                        : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-900/50"
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className={isActive ? "text-neutral-300" : "text-neutral-500"}>
+                      <span className={isActive ? "text-neutral-800 dark:text-neutral-300" : "text-neutral-400 dark:text-neutral-500"}>
                         {item.icon}
                       </span>
                       <span>{item.label}</span>
@@ -115,14 +115,14 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Database Status pill */}
-      <div className="px-3 py-2.5 border-t border-neutral-900 space-y-2 mt-4">
+      <div className="px-3 py-2.5 border-t border-neutral-200 dark:border-neutral-900 space-y-2 mt-4">
         <div className="flex items-center justify-between text-[10px]">
-          <span className="text-neutral-500 uppercase tracking-wider font-mono">Engine</span>
-          <span className="text-neutral-300 font-mono">DuckDB Vector</span>
+          <span className="text-neutral-400 dark:text-neutral-500 uppercase tracking-wider font-mono">Engine</span>
+          <span className="text-neutral-700 dark:text-neutral-300 font-mono">DuckDB Vector</span>
         </div>
         <div className="flex items-center justify-between text-[10px]">
-          <span className="text-neutral-500 uppercase tracking-wider font-mono">Buffer</span>
-          <span className="text-neutral-300 font-mono">Kafka</span>
+          <span className="text-neutral-400 dark:text-neutral-500 uppercase tracking-wider font-mono">Buffer</span>
+          <span className="text-neutral-700 dark:text-neutral-300 font-mono">Kafka</span>
         </div>
       </div>
     </aside>

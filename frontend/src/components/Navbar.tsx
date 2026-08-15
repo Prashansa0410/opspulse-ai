@@ -6,13 +6,14 @@ import Link from "next/link";
 import { Activity, Sparkles, FileCode2, ExternalLink } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { LoginModal } from "./LoginModal";
+import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-neutral-900 bg-[#0a0a0a]/95 backdrop-blur-md px-4 py-2">
+    <header className="sticky top-0 z-40 w-full border-b border-neutral-200 dark:border-neutral-900 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md px-4 py-2">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Brand Logo & Live Status */}
@@ -23,19 +24,19 @@ export const Navbar: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-[15px] tracking-tight text-neutral-100 font-sans">OpsPulse<span className="text-blue-500 font-normal">.ai</span></span>
-                <span className="text-[9px] uppercase font-mono px-1 py-0.5 rounded text-neutral-400 border border-neutral-800 font-medium tracking-wide">Enterprise</span>
+                <span className="font-semibold text-[15px] tracking-tight text-neutral-900 dark:text-neutral-100 font-sans">OpsPulse<span className="text-blue-500 font-normal">.ai</span></span>
+                <span className="text-[9px] uppercase font-mono px-1 py-0.5 rounded text-neutral-500 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-800 font-medium tracking-wide">Enterprise</span>
               </div>
             </div>
           </Link>
 
           {/* Incident Alert Ticker */}
-          <div className="hidden lg:flex items-center gap-2 border border-neutral-800/80 bg-neutral-900/50 px-3 py-1 rounded-full text-xs">
+          <div className="hidden lg:flex items-center gap-2 border border-neutral-200/80 dark:border-neutral-800/80 bg-neutral-50/80 dark:bg-neutral-900/50 px-3 py-1 rounded-full text-xs">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-rose-500"></span>
             </span>
-            <span className="text-neutral-400 font-mono text-[10px] uppercase tracking-wide">Incident Active: BLR-01 Congestion (94.6% Util)</span>
+            <span className="text-neutral-600 dark:text-neutral-400 font-mono text-[10px] uppercase tracking-wide">Incident Active: BLR-01 Congestion (94.6% Util)</span>
           </div>
         </div>
 
@@ -45,14 +46,15 @@ export const Navbar: React.FC = () => {
 
           <div className="flex items-center gap-2">
             {isAuthenticated && user ? (
-              <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg border border-transparent hover:border-neutral-800 transition-all">
+              <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg border border-transparent hover:border-neutral-200 dark:hover:border-neutral-800 transition-all">
                 <div className="flex flex-col text-right">
-                  <span className="text-[13px] font-medium text-neutral-200">{user.full_name}</span>
+                  <span className="text-[13px] font-medium text-neutral-800 dark:text-neutral-200">{user.full_name}</span>
                   <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">{user.role.replace("_", " ")}</span>
                 </div>
+                <ThemeToggle />
                 <button 
                   onClick={logout}
-                  className="p-1.5 hover:bg-neutral-900 rounded text-neutral-500 hover:text-neutral-300 transition-colors"
+                  className="p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-900 rounded text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300 transition-colors"
                   title="Sign Out"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -61,7 +63,7 @@ export const Navbar: React.FC = () => {
             ) : (
               <button
                 onClick={() => setIsLoginOpen(true)}
-                className="px-3 py-1.5 rounded bg-white text-black text-xs font-medium hover:bg-neutral-200 transition-colors"
+                className="px-3 py-1.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-black text-xs font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
               >
                 Sign In
               </button>

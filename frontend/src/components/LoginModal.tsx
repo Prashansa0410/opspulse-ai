@@ -64,8 +64,8 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div className="bg-[#0a0a0a] border border-neutral-900 rounded p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/80 backdrop-blur-sm">
+      <div className="bg-white dark:bg-[#0a0a0a] border border-neutral-200 dark:border-neutral-900 rounded p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
         {onClose && (
           <button
             onClick={onClose}
@@ -75,12 +75,12 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
           </button>
         )}
 
-        <h2 className="text-xl font-semibold mb-6 text-neutral-100 text-center tracking-tight">
+        <h2 className="text-xl font-semibold mb-6 text-neutral-900 dark:text-neutral-100 text-center tracking-tight">
           Sign In to OpsPulse
         </h2>
 
         {error && (
-          <div className="bg-rose-950/40 border border-rose-900/50 text-rose-400 p-3 rounded mb-4 text-xs font-mono text-center">
+          <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 p-3 rounded mb-4 text-xs font-mono text-center">
             {error}
           </div>
         )}
@@ -94,7 +94,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               type="email"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-[#0a0a0a] border border-neutral-800 rounded px-3 py-2 text-neutral-200 text-sm focus:border-neutral-600 outline-none transition-colors"
+              className="w-full bg-white dark:bg-[#0a0a0a] border border-neutral-300 dark:border-neutral-800 rounded px-3 py-2 text-neutral-900 dark:text-neutral-200 text-sm focus:border-neutral-400 dark:focus:border-neutral-600 outline-none transition-colors"
               placeholder="name@company.com"
               required
             />
@@ -107,7 +107,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-[#0a0a0a] border border-neutral-800 rounded px-3 py-2 text-neutral-200 text-sm focus:border-neutral-600 outline-none transition-colors"
+              className="w-full bg-white dark:bg-[#0a0a0a] border border-neutral-300 dark:border-neutral-800 rounded px-3 py-2 text-neutral-900 dark:text-neutral-200 text-sm focus:border-neutral-400 dark:focus:border-neutral-600 outline-none transition-colors"
               placeholder="••••••••"
               required
             />
@@ -115,32 +115,32 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-neutral-100 hover:bg-white text-neutral-900 font-bold py-2 px-4 rounded text-sm transition-colors"
+            className="w-full bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-white text-white dark:text-neutral-900 font-bold py-2 px-4 rounded text-sm transition-colors"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <div className="border-t border-neutral-900 pt-6">
+        <div className="border-t border-neutral-200 dark:border-neutral-900 pt-6">
           <p className="text-[10px] text-neutral-500 mb-3 text-center uppercase tracking-wider font-mono">
             Or Use 1-Click Demo Roles
           </p>
           <div className="grid grid-cols-1 gap-2">
             <button
               onClick={() => handleDemoLogin("exec")}
-              className="text-xs font-medium bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 py-2 rounded transition-colors text-neutral-300"
+              className="text-xs font-medium bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 py-2 rounded transition-colors text-neutral-700 dark:text-neutral-300"
             >
               Log in as <strong>Executive</strong>
             </button>
             <button
               onClick={() => handleDemoLogin("ops")}
-              className="text-xs font-medium bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 py-2 rounded transition-colors text-neutral-300"
+              className="text-xs font-medium bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 py-2 rounded transition-colors text-neutral-700 dark:text-neutral-300"
             >
               Log in as <strong>Operations Manager</strong>
             </button>
             <button
               onClick={() => handleDemoLogin("data")}
-              className="text-xs font-medium bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 py-2 rounded transition-colors text-neutral-300"
+              className="text-xs font-medium bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 py-2 rounded transition-colors text-neutral-700 dark:text-neutral-300"
             >
               Log in as <strong>Data Analyst</strong>
             </button>
