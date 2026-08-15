@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import { MetricCard } from "../components/MetricCard";
 import { ExplainModal } from "../components/ExplainModal";
-import { usePersona } from "../components/PersonaSwitcher";
+import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
 import { ExecutiveSummary, KPITimeseriesItem } from "../lib/types";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, BarChart, Bar } from "recharts";
 
 export default function ExecutiveOverviewPage() {
-  const { persona } = usePersona();
+  const { user } = useAuth();
+  const roleDisplay = user?.role ? user.role.replace("_", " ") : "Loading...";
   const [summary, setSummary] = useState<ExecutiveSummary | null>(null);
   const [timeseries, setTimeseries] = useState<KPITimeseriesItem[]>([]);
   const [isWhyModalOpen, setIsWhyModalOpen] = useState(false);
@@ -78,7 +79,7 @@ export default function ExecutiveOverviewPage() {
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold font-mono tracking-tight text-white flex items-center gap-2"><span>Executive Operational Pulse</span><span className="text-xs font-mono font-normal text-slate-400">({persona.replace("_", " ")})</span></h2>
+          <h2 className="text-base font-bold font-mono tracking-tight text-white flex items-center gap-2"><span>Executive Operational Pulse</span><span className="text-xs font-mono font-normal text-slate-400">({roleDisplay})</span></h2>
           <span className="text-xs font-mono text-slate-400">{loading ? "Refreshing live data…" : `Live • Updated ${new Date().toLocaleTimeString()}`}</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

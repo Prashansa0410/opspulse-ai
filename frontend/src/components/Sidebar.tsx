@@ -19,43 +19,52 @@ import {
   ChevronRight
 } from "lucide-react";
 
+import { useAuth } from "../lib/auth";
+
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const role = user?.role || "EXECUTIVE";
 
-  const navigationItems = [
+  const allNavigationItems = [
     {
       group: "Operations Core",
       items: [
-        { href: "/", label: "Executive Overview", icon: <LayoutDashboard className="w-4 h-4" />, badge: null },
-        { href: "/tower", label: "Control Tower", icon: <Radio className="w-4 h-4" />, badge: "LIVE" },
-        { href: "/warehouses", label: "Warehouses", icon: <Warehouse className="w-4 h-4" />, badge: "Alert" },
-        { href: "/carriers", label: "Carrier Analytics", icon: <Truck className="w-4 h-4" />, badge: null },
-        { href: "/approvals", label: "Approvals & Audit", icon: <CheckCircle className="w-4 h-4" />, badge: null },
+        { href: "/", label: "Overview", icon: <LayoutDashboard className="w-4 h-4" />, badge: null, roles: ["EXECUTIVE", "OPS_MANAGER", "DATA_ANALYST"] },
+        { href: "/tower", label: "Control Tower", icon: <Radio className="w-4 h-4" />, badge: "LIVE", roles: ["EXECUTIVE", "OPS_MANAGER"] },
+        { href: "/warehouses", label: "Warehouses", icon: <Warehouse className="w-4 h-4" />, badge: "Alert", roles: ["EXECUTIVE", "OPS_MANAGER", "DATA_ANALYST"] },
+        { href: "/carriers", label: "Carrier Analytics", icon: <Truck className="w-4 h-4" />, badge: null, roles: ["EXECUTIVE", "OPS_MANAGER", "DATA_ANALYST"] },
+        { href: "/approvals", label: "Approvals & Audit", icon: <CheckCircle className="w-4 h-4" />, badge: null, roles: ["EXECUTIVE"] },
       ]
     },
     {
       group: "Intelligence & ML",
       items: [
-        { href: "/sla-risk", label: "SLA Risk Model", icon: <ShieldAlert className="w-4 h-4" />, badge: "ML" },
-        { href: "/anomalies", label: "Anomaly Center", icon: <AlertTriangle className="w-4 h-4 text-amber-400" />, badge: "9" },
-        { href: "/root-cause", label: "Root Cause Explorer", icon: <GitFork className="w-4 h-4" />, badge: null },
+        { href: "/sla-risk", label: "SLA Risk Model", icon: <ShieldAlert className="w-4 h-4" />, badge: "ML", roles: ["EXECUTIVE", "DATA_ANALYST"] },
+        { href: "/anomalies", label: "Anomaly Center", icon: <AlertTriangle className="w-4 h-4 text-amber-400" />, badge: "9", roles: ["EXECUTIVE", "OPS_MANAGER", "DATA_ANALYST"] },
+        { href: "/root-cause", label: "Root Cause Explorer", icon: <GitFork className="w-4 h-4" />, badge: null, roles: ["EXECUTIVE", "OPS_MANAGER", "DATA_ANALYST"] },
       ]
     },
     {
       group: "Decision Support & AI",
       items: [
-        { href: "/ai-analyst", label: "AI Ops Analyst", icon: <Sparkles className="w-4 h-4 text-cyan-400" />, badge: "Agent" },
-        { href: "/simulations", label: "What-If Simulations", icon: <Sliders className="w-4 h-4 text-indigo-400" />, badge: "Lab" },
+        { href: "/ai-analyst", label: "AI Ops Analyst", icon: <Sparkles className="w-4 h-4 text-cyan-400" />, badge: "Agent", roles: ["EXECUTIVE", "OPS_MANAGER", "DATA_ANALYST"] },
+        { href: "/simulations", label: "What-If Simulations", icon: <Sliders className="w-4 h-4 text-indigo-400" />, badge: "Lab", roles: ["EXECUTIVE", "OPS_MANAGER"] },
       ]
     },
     {
       group: "Data Engineering",
       items: [
-        { href: "/data-quality", label: "Data Quality Hub", icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, badge: "100%" },
-        { href: "/system-health", label: "System & Telemetry", icon: <Server className="w-4 h-4" />, badge: "Healthy" },
+        { href: "/data-quality", label: "Data Quality Hub", icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, badge: "100%", roles: ["EXECUTIVE", "DATA_ANALYST"] },
+        { href: "/system-health", label: "System & Telemetry", icon: <Server className="w-4 h-4" />, badge: "Healthy", roles: ["EXECUTIVE", "DATA_ANALYST"] },
       ]
     }
   ];
+
+  const navigationItems = allNavigationItems.map(group => ({
+    ...group,
+    items: group.items.filter(item => item.roles.includes(role))
+  })).filter(group => group.items.length > 0);
 
   return (
     <aside className="w-64 shrink-0 border-r border-slate-800/80 bg-[#090d16] flex flex-col justify-between p-3 hidden md:flex min-h-[calc(100vh-57px)]">

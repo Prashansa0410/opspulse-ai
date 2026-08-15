@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { PersonaSwitcher } from "./PersonaSwitcher";
+
 import { Activity, Sparkles, FileCode2, ExternalLink } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { LoginModal } from "./LoginModal";
@@ -42,9 +42,7 @@ export const Navbar: React.FC = () => {
 
         {/* Persona Switcher & Fast Links */}
         <div className="flex items-center gap-3">
-          <div className="hidden md:block">
-            <PersonaSwitcher />
-          </div>
+
 
           <div className="flex items-center gap-1.5">
             <Link

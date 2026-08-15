@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
-import { PersonaProvider } from "../components/PersonaSwitcher";
+
 import { AuthProvider } from "../lib/auth";
 import { LiveRefresh } from "../components/LiveRefresh";
 import { ProtectedLayout } from "../components/ProtectedLayout";
@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className="bg-[#090d16] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
         <AuthProvider>
           <ProtectedLayout>
-            <PersonaProvider>
+
               <Navbar />
               <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
@@ -31,7 +31,7 @@ export default function RootLayout({
                 </main>
               </div>
               <LiveRefresh />
-            </PersonaProvider>
+
           </ProtectedLayout>
         </AuthProvider>
       </body>
