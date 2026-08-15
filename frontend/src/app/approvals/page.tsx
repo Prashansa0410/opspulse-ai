@@ -52,13 +52,13 @@ export default function ApprovalsPage() {
       {loading ? (
         <div className="text-slate-600 dark:text-slate-400">Loading...</div>
       ) : recommendations.length === 0 ? (
-        <div className="text-slate-600 dark:text-slate-400 bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-xl p-8 text-center">
+        <div className="text-slate-600 dark:text-slate-400 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-xl p-8 text-center">
           No pending AI recommendations.
         </div>
       ) : (
         <div className="space-y-4">
           {recommendations.map((rec) => (
-            <div key={rec.recommendation_id} className="bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+            <div key={rec.recommendation_id} className="bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-mono text-slate-500">{rec.recommendation_id}</span>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
@@ -72,12 +72,12 @@ export default function ApprovalsPage() {
               
               <div className="mb-4">
                 <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">User Query</h3>
-                <p className="text-slate-800 dark:text-slate-200 bg-slate-900/50 p-3 rounded-lg text-sm font-mono">{rec.query}</p>
+                <p className="text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-900/50 p-3 rounded-lg text-sm font-mono">{rec.query}</p>
               </div>
 
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">AI Action Plan</h3>
-                <div className="text-slate-700 dark:text-slate-300 text-sm prose prose-invert max-w-none bg-blue-950/20 p-4 rounded-lg border border-blue-900/30 whitespace-pre-wrap">
+                <div className="text-slate-700 dark:text-slate-300 text-sm prose dark:prose-invert max-w-none bg-slate-50 dark:bg-blue-950/20 p-4 rounded-lg border border-slate-200 dark:border-blue-900/30 whitespace-pre-wrap">
                   {rec.recommendation_text}
                 </div>
               </div>
