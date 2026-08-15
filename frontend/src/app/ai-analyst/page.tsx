@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Sparkles, Send, Terminal, ShieldCheck, CheckCircle2, Clock, FileCode } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { api } from "../../lib/api";
 import { AIQueryResponse } from "../../lib/types";
 
@@ -158,9 +159,9 @@ export default function AIAnalystPage() {
 
             {/* AI Formatted Response */}
             <div className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-sans prose dark:prose-invert max-w-none space-y-2">
-              <div className="whitespace-pre-line">
+              <ReactMarkdown>
                 {msg.response}
-              </div>
+              </ReactMarkdown>
             </div>
 
             {/* Citations & Evidence Footnote */}

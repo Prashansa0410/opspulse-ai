@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { api } from "../../lib/api";
 import { useAuth } from "../../lib/auth";
 
@@ -77,8 +78,8 @@ export default function ApprovalsPage() {
 
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">AI Action Plan</h3>
-                <div className="text-slate-700 dark:text-slate-300 text-sm prose dark:prose-invert max-w-none bg-slate-50 dark:bg-blue-950/20 p-4 rounded-lg border border-slate-200 dark:border-blue-900/30 whitespace-pre-wrap">
-                  {rec.recommendation_text}
+                <div className="text-slate-700 dark:text-slate-300 text-sm prose dark:prose-invert max-w-none bg-slate-50 dark:bg-blue-950/20 p-4 rounded-lg border border-slate-200 dark:border-blue-900/30">
+                  <ReactMarkdown>{rec.recommendation_text}</ReactMarkdown>
                 </div>
               </div>
 
