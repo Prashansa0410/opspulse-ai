@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #090d16;
+    --bg-secondary: #0f172a;
+    --bg-card: #141e33;
+    --border-color: #1e293b;
+    --border-subtle: #27354f;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f17;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Utility Badges */
+.badge-critical {
+  @apply bg-rose-950/70 text-rose-300 border border-rose-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+}
+.badge-warning {
+  @apply bg-amber-950/70 text-amber-300 border border-amber-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+}
+.badge-success {
+  @apply bg-emerald-950/70 text-emerald-300 border border-emerald-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+}
+.badge-info {
+  @apply bg-blue-950/70 text-blue-300 border border-blue-800/80 px-2 py-0.5 rounded text-xs font-mono font-medium;
+}
+.badge-neutral {
+  @apply bg-slate-800 text-slate-300 border border-slate-700 px-2 py-0.5 rounded text-xs font-mono;
+}
