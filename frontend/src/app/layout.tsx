@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-[#090d16] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <html lang="en">
+      <body className="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
         <AuthProvider>
           <ProtectedLayout>
 
