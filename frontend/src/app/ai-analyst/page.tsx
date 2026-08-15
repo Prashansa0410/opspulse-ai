@@ -139,17 +139,17 @@ export default function AIAnalystPage() {
 
             {/* Tool Calls Execution Trace */}
             {msg.tool_calls && msg.tool_calls.length > 0 && (
-              <div className="p-3 rounded bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-900 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                  <Terminal className="w-3 h-3 text-slate-400" />
+              <div className="p-3 rounded bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <Terminal className="w-3 h-3 text-slate-400 dark:text-slate-500" />
                   <span>Tools & SQL Executed ({msg.tool_calls.length})</span>
                 </div>
                 <div className="space-y-1 font-mono text-xs">
                   {msg.tool_calls.map((tc, tIdx) => (
-                    <div key={tIdx} className="flex items-center gap-2 text-slate-400">
-                      <span className="text-slate-600">✓</span>
-                      <span className="text-blue-600 dark:text-blue-400">{tc.tool}()</span>
-                      <span className="text-slate-600 text-[11px]">{JSON.stringify(tc.args)}</span>
+                    <div key={tIdx} className="flex items-center gap-2 text-slate-400 dark:text-slate-500">
+                      <span className="text-slate-600 dark:text-slate-500">✓</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium">{tc.tool}()</span>
+                      <span className="text-slate-600 dark:text-slate-400 text-[11px]">{JSON.stringify(tc.args)}</span>
                     </div>
                   ))}
                 </div>
@@ -157,7 +157,7 @@ export default function AIAnalystPage() {
             )}
 
             {/* AI Formatted Response */}
-            <div className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-sans prose dark:prose-invert max-w-none space-y-2">
+            <div className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-sans prose dark:prose-invert max-w-none space-y-2">
               <div className="whitespace-pre-line">
                 {msg.response}
               </div>
