@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.config import settings
 from backend.app.api.v1.router import api_router
+from backend.app.api.v1.live import router as live_router
 from backend.app.db.session import db_manager
 from backend.app.db.seed_data import run_seed
 from backend.app.observability.metrics import metrics_middleware, get_prometheus_metrics
@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
         logger.warning(f"Database initialization exception: {e}. Executing seed fallback...")
         run_seed(volume=settings.DATA_VOLUME, seed=settings.RANDOM_SEED)
 
-    # No background simulation here. The free deployment remains request-driven.
+    # No background simulation. Live events are generated only on dashboard request.
     yield
 
     logger.info("Shutting down OpsPulse AI services...")
@@ -49,7 +49,6 @@ app = FastAPI(
     openapi_url="/openapi.json"
 )
 
-# Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -60,13 +59,12 @@ app.add_middleware(
 app.add_middleware(LoggingMiddleware)
 app.middleware("http")(metrics_middleware)
 
-# Routes
 app.include_router(api_router, prefix="/api")
+app.include_router(live_router, prefix="/api/v1")
 
 
 @app.get("/metrics", tags=["Observability"], summary="Prometheus Metrics Endpoint")
 def metrics():
-    """Prometheus exposition format metrics for scraping."""
     return get_prometheus_metrics()
 
 
