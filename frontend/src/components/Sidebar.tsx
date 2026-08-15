@@ -13,6 +13,7 @@ import {
   GitFork,
   Sparkles,
   Sliders,
+  CheckCircle,
   CheckCircle2,
   Server,
   ChevronRight
@@ -29,6 +30,7 @@ export const Sidebar: React.FC = () => {
         { href: "/tower", label: "Control Tower", icon: <Radio className="w-4 h-4" />, badge: "LIVE" },
         { href: "/warehouses", label: "Warehouses", icon: <Warehouse className="w-4 h-4" />, badge: "Alert" },
         { href: "/carriers", label: "Carrier Analytics", icon: <Truck className="w-4 h-4" />, badge: null },
+        { href: "/approvals", label: "Approvals & Audit", icon: <CheckCircle className="w-4 h-4" />, badge: null },
       ]
     },
     {

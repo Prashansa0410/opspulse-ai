@@ -13,23 +13,63 @@ import {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
 
+let currentToken: string | null = null;
+
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (currentToken) {
+    headers["Authorization"] = `Bearer ${currentToken}`;
+  }
+
   const res = await fetch(url, {
     headers: {
-      "Content-Type": "application/json",
+      ...headers,
       ...options?.headers,
     },
     ...options,
   });
 
   if (!res.ok) {
-    throw new Error(`API call failed [${res.status}]: ${res.statusText}`);
+    if (res.status === 401 && typeof window !== "undefined") {
+      // Force logout on 401
+      localStorage.removeItem("opspulse_token");
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
+      }
+    }
+    const errorText = await res.text().catch(() => "Unknown error");
+    throw new Error(`API call failed [${res.status}]: ${errorText}`);
   }
   return res.json();
 }
 
 export const api = {
+  setToken: (token: string | null) => {
+    currentToken = token;
+  },
+
+  // Auth
+  login: async (credentials: any): Promise<{ access_token: string }> => {
+    // FastAPI OAuth2PasswordRequestForm expects form data, but our custom /auth/login accepts JSON or Form.
+    // Let's use x-www-form-urlencoded
+    const params = new URLSearchParams();
+    params.append("username", credentials.username);
+    params.append("password", credentials.password);
+
+    const url = `${API_BASE}/auth/login`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString()
+    });
+    if (!res.ok) throw new Error("Login failed");
+    return res.json();
+  },
+
   // KPIs
   getKPIs: async (days: number = 30): Promise<{ status: string; summary: ExecutiveSummary; timeseries: KPITimeseriesItem[] }> => {
     return fetchJson(`/kpis?days=${days}`);
@@ -101,4 +141,16 @@ export const api = {
   getSystemHealth: async (): Promise<any> => {
     return fetchJson("/health");
   },
+
+  // HITL Workflow
+  getRecommendations: async (): Promise<any[]> => {
+    return fetchJson("/hitl/recommendations");
+  },
+
+  reviewRecommendation: async (id: string, status: string, comments?: string): Promise<any> => {
+    return fetchJson(`/hitl/recommendations/${id}/review`, {
+      method: "POST",
+      body: JSON.stringify({ status, comments })
+    });
+  }
 };

@@ -15,15 +15,23 @@ from backend.app.ml.simulation import simulation_engine, SimulationRequest, Simu
 from backend.app.ai_analyst.agent import ai_analyst
 from backend.app.data_pipeline.data_quality import dq_framework
 from backend.app.data_pipeline.kafka_stream import stream_broker
+from backend.app.auth.models import UserRole, UserProfile
+from backend.app.auth.dependencies import get_current_user, get_optional_user, require_role
+from backend.app.api.v1.auth import auth_router
+from backend.app.api.v1.hitl import hitl_router
 
 api_router = APIRouter(prefix="/v1")
+
+# Mount auth router (unprotected routes like login)
+api_router.include_router(auth_router)
+api_router.include_router(hitl_router)
 
 
 # -------------------------------------------------------------
 # Request / Response Pydantic Models
 # -------------------------------------------------------------
 class AIQueryRequest(BaseModel):
-    query: str = Field(..., example="Why did on-time delivery drop yesterday?")
+    query: str = Field(..., json_schema_extra={"example": "Why did on-time delivery drop yesterday?"})
 
 
 class AIQueryResponse(BaseModel):
@@ -33,6 +41,7 @@ class AIQueryResponse(BaseModel):
     citations: list[str]
     latency_ms: float
     timestamp: str
+    recommendation_id: Optional[str] = None
 
 
 class OrderFilterParams(BaseModel):
@@ -216,11 +225,19 @@ def get_root_causes(metric: str = Query(default="on_time_delivery_rate")):
 
 
 # -------------------------------------------------------------
-# 8. Decision Support / What-If Simulations Endpoint
+# 8. Decision Support / What-If Simulations Endpoint (RBAC Protected)
 # -------------------------------------------------------------
-@api_router.post("/simulations", response_model=SimulationResult, summary="Execute What-If Operational Intervention Simulation")
-def create_simulation(request: SimulationRequest):
-    """Simulate the quantitative impact of shifting volume between fulfillment hubs or inducting carrier capacity."""
+@api_router.post(
+    "/simulations",
+    response_model=SimulationResult,
+    summary="Execute What-If Operational Intervention Simulation (Requires OPS_MANAGER or EXECUTIVE)"
+)
+def create_simulation(
+    request: SimulationRequest,
+    current_user: UserProfile = Depends(require_role([UserRole.OPS_MANAGER, UserRole.EXECUTIVE]))
+):
+    """Simulate the quantitative impact of shifting volume between fulfillment hubs.
+    RBAC: Requires Operations Manager or Executive role."""
     return simulation_engine.run_simulation(request)
 
 
@@ -235,12 +252,20 @@ def get_recent_simulations():
 
 
 # -------------------------------------------------------------
-# 9. AI Operations Analyst Natural Language Endpoint
+# 9. AI Operations Analyst Natural Language Endpoint (RBAC Protected)
 # -------------------------------------------------------------
-@api_router.post("/ai/query", response_model=AIQueryResponse, summary="Ask AI Operations Analyst")
-def query_ai_analyst(request: AIQueryRequest):
-    """Natural-language question answering backed by real tool executions, AST SQL safety guardrails, and zero hallucination."""
-    result = ai_analyst.process_query(request.query)
+@api_router.post(
+    "/ai/query",
+    response_model=AIQueryResponse,
+    summary="Ask AI Operations Analyst (Requires Authenticated User)"
+)
+def query_ai_analyst(
+    request: AIQueryRequest,
+    current_user: UserProfile = Depends(require_role([UserRole.EXECUTIVE, UserRole.OPS_MANAGER, UserRole.DATA_ANALYST]))
+):
+    """Natural-language question answering backed by real tool executions, AST SQL safety guardrails, and zero hallucination.
+    RBAC: Requires any valid authenticated role."""
+    result = ai_analyst.process_query(request.query, created_by=current_user.user_id)
     return AIQueryResponse(**result)
 
 
@@ -248,7 +273,7 @@ def query_ai_analyst(request: AIQueryRequest):
 # 10. Data Quality Hub Endpoint
 # -------------------------------------------------------------
 @api_router.get("/data-quality", summary="Get Data Quality Health Report & Rule Audits")
-def get_data_quality():
+def get_data_quality(current_user: Optional[UserProfile] = Depends(get_optional_user)):
     """Execute validation rules and return composite DQ Score %, passed/failed tests, and rule details."""
     report = dq_framework.run_all_checks()
     return {

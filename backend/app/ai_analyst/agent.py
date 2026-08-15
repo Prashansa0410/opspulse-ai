@@ -19,7 +19,7 @@ You answer questions with rigorous quantitative analysis, exact citations to exe
 Always distinguish historical observed facts from simulated model predictions.
 """
 
-    def process_query(self, user_prompt: str) -> dict[str, Any]:
+    def process_query(self, user_prompt: str, created_by: str = "system") -> dict[str, Any]:
         """Route user query, execute relevant tools, and format actionable response with citations."""
         start_time = time.time()
         prompt_lower = user_prompt.lower()
@@ -27,6 +27,7 @@ Always distinguish historical observed facts from simulated model predictions.
         citations = []
         response_text = ""
         sql_used = None
+        recommendation_id = None
 
         # -------------------------------------------------------------
         # Intent Detection & Tool Selection
@@ -59,6 +60,14 @@ Always distinguish historical observed facts from simulated model predictions.
 
 **Recommended Tactical Step**: Reallocate 18% volume from `{top_wh.get('code', 'BLR-01')}` to sister hub `BLR-02` and shift excess freight to BlueDart Prime.
 """
+
+            from backend.app.hitl.service import hitl_service
+            recommendation_id = hitl_service.create_recommendation(
+                query=user_prompt,
+                recommendation_text=response_text,
+                created_by=created_by,
+                supporting_evidence={"rca_data": rca_data}
+            )
 
         # 2. "Which carrier is performing worst / carrier performance?"
         elif any(w in prompt_lower for w in ["carrier", "courier", "shipping partner", "transit"]):
@@ -130,6 +139,15 @@ Always distinguish historical observed facts from simulated model predictions.
 - Reassign 25% of SwiftExpress South shipments to BlueDart Prime priority ground.
 """
 
+            from backend.app.hitl.service import hitl_service
+            recommendation_id = hitl_service.create_recommendation(
+                query=user_prompt,
+                recommendation_text=response_text,
+                created_by=created_by,
+                supporting_evidence={"sim_res": sim_res}
+            )
+
+
         # 5. "Which shipments should we prioritize / high risk / SLA risk?"
         elif any(w in prompt_lower for w in ["prioritize", "risk", "in-flight", "predict"]):
             high_risk = tool_registry.get_sla_risk(limit=5)
@@ -151,6 +169,15 @@ Our predictive Gradient Boosting model identified high-probability breach risks 
 {rows_formatted}
 **Recommended Operational Action**: Tag these shipments for **Priority Dock Handoff** and route via air courier expedited dispatch.
 """
+
+            from backend.app.hitl.service import hitl_service
+            recommendation_id = hitl_service.create_recommendation(
+                query=user_prompt,
+                recommendation_text=response_text,
+                created_by=created_by,
+                supporting_evidence={"high_risk_shipments": high_risk}
+            )
+
 
         # 6. Default / SQL / General KPI Summary
         else:
@@ -182,7 +209,8 @@ You can ask me to analyze root causes, investigate carrier bottlenecks, predict 
             "tool_calls": tool_calls_executed,
             "citations": citations,
             "latency_ms": latency_ms,
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "recommendation_id": recommendation_id
         }
 
 

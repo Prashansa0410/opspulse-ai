@@ -265,3 +265,16 @@ CREATE TABLE IF NOT EXISTS dq_audit_log (
     details_json TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS ai_recommendations (
+    recommendation_id VARCHAR(32) PRIMARY KEY,
+    query VARCHAR(500) NOT NULL,
+    recommendation_text TEXT NOT NULL,
+    supporting_evidence_json TEXT,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    created_by VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reviewer_id VARCHAR(50),
+    reviewed_at TIMESTAMP,
+    reviewer_comments TEXT
+);

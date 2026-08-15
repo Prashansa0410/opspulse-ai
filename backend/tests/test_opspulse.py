@@ -241,7 +241,14 @@ def test_api_endpoints():
         assert res.status_code == 200
         assert "data" in res.json()
 
-        # Simulation POST
+        # Authenticate for protected endpoints
+        login_res = client.post("/api/v1/auth/login", json={
+            "email": "ops@opspulse.ai",
+            "password": "OpsManager123!"
+        })
+        auth_header = {"Authorization": f"Bearer {login_res.json()['access_token']}"}
+
+        # Simulation POST (Protected: OPS_MANAGER)
         sim_payload = {
             "title": "Test Simulation Reallocation",
             "intervention_type": "WAREHOUSE_VOLUME_REALLOCATION",
@@ -249,13 +256,13 @@ def test_api_endpoints():
             "target_warehouse_id": "WH_BLR_02",
             "volume_shift_pct": 15.0
         }
-        res = client.post("/api/v1/simulations", json=sim_payload)
+        res = client.post("/api/v1/simulations", json=sim_payload, headers=auth_header)
         assert res.status_code == 200
         assert res.json()["status"] == "COMPLETED"
 
-        # AI Query POST
+        # AI Query POST (Protected)
         ai_payload = {"query": "Why did SLA breach rate increase?"}
-        res = client.post("/api/v1/ai/query", json=ai_payload)
+        res = client.post("/api/v1/ai/query", json=ai_payload, headers=auth_header)
         assert res.status_code == 200
         assert "response" in res.json()
 

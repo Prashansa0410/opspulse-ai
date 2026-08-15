@@ -229,3 +229,16 @@ CREATE TABLE IF NOT EXISTS simulation_runs (
     confidence_score NUMERIC(5, 2),
     status VARCHAR(50) DEFAULT 'COMPLETED'
 );
+
+CREATE TABLE IF NOT EXISTS ai_recommendations (
+    recommendation_id VARCHAR(50) PRIMARY KEY,
+    query VARCHAR(500) NOT NULL,
+    recommendation_text TEXT NOT NULL,
+    supporting_evidence_json TEXT,
+    status VARCHAR(50) DEFAULT 'PENDING',
+    created_by VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reviewer_id VARCHAR(100),
+    reviewed_at TIMESTAMP,
+    reviewer_comments TEXT
+);

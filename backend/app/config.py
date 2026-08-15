@@ -48,7 +48,10 @@ class Settings(BaseSettings):
         "*"
     ]
     
-    # Security & Guardrails
+    # Security, JWT & Guardrails
+    JWT_SECRET_KEY: str = "opspulse-super-secure-production-jwt-secret-key-change-me"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     MAX_SQL_ROWS_RETURNED: int = 200
     QUERY_TIMEOUT_SECONDS: int = 5
     
