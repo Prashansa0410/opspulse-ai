@@ -101,11 +101,26 @@ class KPIService:
             }
         ]
 
+        # Get live totals for the last 24 hours directly from orders table to prevent 
+        # reset-to-zero issues when a new day starts in the simulator
+        live_totals = conn.execute("""
+            SELECT 
+                COUNT(*) as orders_last_24h,
+                COALESCE(SUM(total_amount), 0.0) as revenue_last_24h,
+                COALESCE(SUM(total_amount), 0.0) as gmv_last_24h
+            FROM orders 
+            WHERE CAST(order_date AS TIMESTAMP) >= CURRENT_TIMESTAMP - INTERVAL 24 HOUR
+        """).fetchone()
+
+        orders_today = live_totals[0] if live_totals else current["total_orders"]
+        revenue_today = live_totals[1] if live_totals else current["total_revenue"]
+        gmv_today = live_totals[2] if live_totals else current["total_gmv"]
+
         return {
             "snapshot_date": current["kpi_date"],
-            "orders_today": current["total_orders"],
-            "revenue_today": current["total_revenue"],
-            "gmv_today": current["total_gmv"],
+            "orders_today": orders_today,
+            "revenue_today": revenue_today,
+            "gmv_today": gmv_today,
             "on_time_delivery_rate": otd_current,
             "on_time_delivery_delta": otd_delta,
             "sla_breach_rate": current["sla_breach_rate"],
